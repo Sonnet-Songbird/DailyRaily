@@ -10,6 +10,7 @@ class Game(
     val name: String,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
+    val resetDay: Int,
     val todoList: ArrayList<Todo> = ArrayList(),
     val todoIdList: ArrayList<UUID> = ArrayList()
 ) {
@@ -27,7 +28,6 @@ class Game(
         }
         return now.toLocalDate()
     }
-
 }
 
 class GameList(private val gameList: Array<Game>)
