@@ -13,9 +13,9 @@ class Game(
     val todoList: ArrayList<Todo> = ArrayList(),
     val todoIdList: ArrayList<UUID> = ArrayList()
 ) {
-    fun register(todo: Todo) {
+    fun register(todo: Todo, id: UUID) {
         this.todoList.add(todo)
-        this.todoIdList.add(todo.todoID)
+        this.todoIdList.add(id)
     }
 
     fun adjustedDate(): LocalDate {
