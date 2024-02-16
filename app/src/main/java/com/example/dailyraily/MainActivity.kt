@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 backPressedTime = System.currentTimeMillis()
                 Toast.makeText(this@MainActivity, "한 번 더 누르면 종료합니다.", Toast.LENGTH_SHORT).show()
             }
-            navController.navigate(R.id.nav_home)
+            navController.navigate(R.id.nav_todo)
 
 
         }
