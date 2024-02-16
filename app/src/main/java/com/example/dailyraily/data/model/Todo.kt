@@ -1,26 +1,49 @@
 package com.example.dailyraily.data.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import java.time.LocalDate
 import java.util.UUID
 
-class Todo(private val game: Game, private var name: String, private val id: UUID) {
+@Entity(
+    tableName = "todos",
+    foreignKeys = [
+        ForeignKey(
+            entity = Game::class,
+            parentColumns = ["name"],
+            childColumns = ["gameName"]
+        )
+    ]
+)
+class Todo(
+    @PrimaryKey private val id: UUID,
+    @Ignore val game: Game,
+    private var name: String,
+    private var recentResetDate: LocalDate
+) {
     private val gameName = game.name
     private var goal: Int = 0
     private var count: Int = 0
-    private var recentResetDate: LocalDate = game.adjustedDate()
     private lateinit var resetType: ResetType
     private var important = false
+
+    @get:Ignore
     val done: Boolean
         get() = goal <= count
+
+    @get:Ignore
     val priority: Int
         get() = resetType.getPriority(this)
+
+    @get:Ignore
     val resetPending: Boolean
         get() = resetType.isResetPending(this)
 
 
     init {
-        game.register(this, id)
-
+        game.register(this)
     }
 
     constructor(
@@ -30,9 +53,10 @@ class Todo(private val game: Game, private var name: String, private val id: UUI
         resetType: ResetType,
         important: Boolean
     ) : this(
+        UUID.randomUUID(),
         game,
         name,
-        UUID.randomUUID()
+        game.adjustedDate
     ) {
         this.goal = goal
         this.resetType = resetType
@@ -41,14 +65,14 @@ class Todo(private val game: Game, private var name: String, private val id: UUI
 
     fun reset() {
         count = 0
-        recentResetDate = game.adjustedDate()
+        recentResetDate = game.adjustedDate
     }
 
     //Todo: Priority 산정 기준 반영.
     enum class ResetType {
         DAILY {
             override fun isResetPending(todo: Todo): Boolean {
-                return todo.game.adjustedDate() != todo.recentResetDate
+                return todo.game.adjustedDate != todo.recentResetDate
             }
 
             override fun getPriority(todo: Todo): Int {
@@ -66,7 +90,7 @@ class Todo(private val game: Game, private var name: String, private val id: UUI
         },
         WEEKLY {
             override fun isResetPending(todo: Todo): Boolean {
-                val today = todo.game.adjustedDate()
+                val today = todo.game.adjustedDate
                 val dateDifference =
                     (today.dayOfWeek.value - todo.game.resetDOW.value + 7) % 7
                 val resetDate = today.minusDays(dateDifference.toLong());
@@ -89,7 +113,7 @@ class Todo(private val game: Game, private var name: String, private val id: UUI
         },
         MONTHLY {
             override fun isResetPending(todo: Todo): Boolean {
-                val today = todo.game.adjustedDate()
+                val today = todo.game.adjustedDate
                 val resetDay = todo.game.resetDay
                 var resetDate = today.withDayOfMonth(resetDay)
                 if (today.dayOfMonth > resetDay)

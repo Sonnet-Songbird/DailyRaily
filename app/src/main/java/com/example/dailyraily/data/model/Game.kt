@@ -1,32 +1,41 @@
 package com.example.dailyraily.data.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.UUID
 
-
+@Entity(
+    tableName = "games",
+)
 class Game(
-    val name: String,
+    @PrimaryKey val name: String,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
     val resetDay: Int,
     val todoList: ArrayList<Todo> = ArrayList(),
-    val todoIdList: ArrayList<UUID> = ArrayList()
 ) {
-    fun register(todo: Todo, id: UUID) {
+    @get:Ignore
+    val adjustedDate: LocalDate
+        get() {
+            var now = LocalDateTime.now()
+            if (resetHour != 0) {
+                if (now.hour < resetHour) {
+                    now = now.minusDays(1)
+                }
+            }
+            return now.toLocalDate()
+        }
+
+
+    fun register(todo: Todo) {
         this.todoList.add(todo)
-        this.todoIdList.add(id)
     }
 
-    fun adjustedDate(): LocalDate {
-        var now = LocalDateTime.now()
-        if (resetHour != 0) {
-            if (now.hour < resetHour) {
-                now = now.minusDays(1)
-            }
-        }
-        return now.toLocalDate()
+    fun register(todos: Array<Todo>) {
+
     }
 }
 
