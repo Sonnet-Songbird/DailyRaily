@@ -6,6 +6,8 @@
         android:layout_height="match_parent"
         tools:context=".ui.filter.FilterFragment">
 
+
+    <include layout="@layout/frame_list" />
     <TextView
             android:id="@+id/text_filter"
             android:layout_width="match_parent"
