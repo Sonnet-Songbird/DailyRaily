@@ -10,4 +10,5 @@
     <string name="menu_todo">Todo</string>
     <string name="menu_game">Game</string>
     <string name="menu_home">Home</string>
+    <string name="fab">fab</string>
 </resources>
