@@ -6,7 +6,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.todo.TodoFragment">
 
-    <include layout="@layout/frame_list" />
+    <include
+            android:id="@+id/frame_list"
+            android:layout="@layout/frame_list"/>
 
     <TextView
             android:id="@+id/text_todo"
