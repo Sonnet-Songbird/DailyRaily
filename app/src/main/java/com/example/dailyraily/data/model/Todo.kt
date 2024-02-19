@@ -1,5 +1,7 @@
 package com.example.dailyraily.data.model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
@@ -18,8 +20,8 @@ import java.util.UUID
     ]
 )
 class Todo(
-    @PrimaryKey private val id: UUID,
-    @Ignore val game: Game,
+    private val id: UUID,
+    val game: Game,
     private var name: String,
     private var recentResetDate: LocalDate
 ) {
@@ -28,6 +30,8 @@ class Todo(
     private var count: Int = 0
     private lateinit var resetType: ResetType
     private var important = false
+    private val _todoLiveData = MutableLiveData<Todo>()
+    val todoLiveData: LiveData<Todo> get() = _todoLiveData
 
     @get:Ignore
     val done: Boolean
@@ -44,8 +48,11 @@ class Todo(
 
     init {
         game.register(this)
+        _todoLiveData.value = this
     }
-
+    fun updateTodo() {
+        _todoLiveData.value = this
+    }
     constructor(
         game: Game,
         name: String,
