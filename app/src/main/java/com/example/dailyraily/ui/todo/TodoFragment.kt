@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dailyraily.databinding.FragmentTodoBinding
 
 class TodoFragment : Fragment() {
 
     private var _binding: FragmentTodoBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private val todoViewModel by lazy {
+        ViewModelProvider(this)[TodoViewModel::class.java]
+    }
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,16 +22,17 @@ class TodoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val todoViewModel =
-            ViewModelProvider(this).get(TodoViewModel::class.java)
-
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textTodo
-        todoViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        val recyclerView = binding.frameList.recyclerView
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+
+        // RecyclerView 어댑터 초기화
+        val adapter = todoViewModel.listAdapter
+        recyclerView.adapter = adapter
+
         return root
     }
 

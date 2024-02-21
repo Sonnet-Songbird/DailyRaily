@@ -1,8 +1,7 @@
 package com.example.dailyraily.data.model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.dailyraily.ui.todo.TodoFragment
+import android.content.Context
+import com.example.dailyraily.data.repository.TodoDAO
 import java.time.LocalDate
 import java.util.UUID
 
@@ -16,9 +15,6 @@ class Todo(
     var recentResetDate: LocalDate,
     var important: Boolean,
 ) {
-    private val _todoLiveData = MutableLiveData<Todo>()
-    val todoLiveData: LiveData<Todo>
-        get() = _todoLiveData
 
     val done: Boolean
         get() = goal <= count
@@ -32,7 +28,6 @@ class Todo(
 
     init {
         game.register(this)
-        _todoLiveData.value = this
     }
 
 
@@ -53,15 +48,25 @@ class Todo(
         important
     )
 
-
-    fun updateTodo() {
-        _todoLiveData.value = this
+    companion object {
+        /** Loads only if the game to be connected is already loaded. */
+        fun loadAllTodos(context: Context): List<Todo> {
+            return TodoDAO(context).getAllTodos()
+        }
     }
 
-    fun reset() {
+    private fun update(context: Context) {
+        val dao = TodoDAO(context)
+        dao.updateTodo(this)
+    }
+
+    fun reset(context: Context) {
         count = 0
         recentResetDate = game.adjustedDate
+
+        update(context)
     }
+
 
     //Todo: Priority 산정 기준 반영.
     enum class ResetType {
@@ -155,17 +160,6 @@ class Todo(
                 return entries[ordinal]
             }
         }
-    }
-
-
-    fun registerLiveDataObserver(todoFragment: TodoFragment) {
-        val viewLifecycleOwner = todoFragment.viewLifecycleOwner
-//        todoListLiveData.observe(viewLifecycleOwner) { updatedTodoList ->
-//
-//        }
-//        for (todoLiveData: LiveData<Todo> in todoListLiveData.value.orEmpty()) {
-//
-//        }
     }
 
 
