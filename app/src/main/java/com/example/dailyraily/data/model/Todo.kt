@@ -1,8 +1,13 @@
 package com.example.dailyraily.data.model
 
+import TodoCreateDTO
 import android.content.Context
 import com.example.dailyraily.data.repository.TodoDAO
+import com.example.dailyraily.ui.list.ItemData
+import com.example.dailyraily.ui.list.Listable
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime.now
 import java.util.UUID
 
 class Todo(
@@ -14,10 +19,15 @@ class Todo(
     var resetType: ResetType,
     var recentResetDate: LocalDate,
     var important: Boolean,
-) {
+) : Listable {
 
     val done: Boolean
         get() = goal <= count
+
+
+    val leftTime: Duration?
+        get() = resetType.getNextResetDateTime(this).let { Duration.between(now(), (it)) }
+
 
     val priority: Int
         get() = resetType.getPriority(this)
@@ -53,6 +63,11 @@ class Todo(
         fun loadAllTodos(context: Context): List<Todo> {
             return TodoDAO(context).getAllTodos()
         }
+
+        fun create(context: Context, dto: TodoCreateDTO) {
+            val dao = TodoDAO(context)
+            dao.insertTodo(Todo(dto.game, dto.name, dto.goal, dto.resetType, dto.important))
+        }
     }
 
     private fun update(context: Context) {
@@ -68,98 +83,14 @@ class Todo(
     }
 
 
-    //Todo: Priority 산정 기준 반영.
-    enum class ResetType {
-        DAILY {
-            override fun isResetPending(todo: Todo): Boolean {
-                return todo.game.adjustedDate != todo.recentResetDate
-            }
-
-            override fun getPriority(todo: Todo): Int {
-                return if (todo.done) {
-                    0
-                } else {
-                    if (todo.important)
-                        101
-                    else {
-                        100
-                    }
-                }
-            }
-
-        },
-        WEEKLY {
-            override fun isResetPending(todo: Todo): Boolean {
-                val today = todo.game.adjustedDate
-                val dateDifference =
-                    (today.dayOfWeek.value - todo.game.resetDOW.value + 7) % 7
-                val resetDate = today.minusDays(dateDifference.toLong());
-
-                return resetDate > todo.recentResetDate
-            }
-
-            override fun getPriority(todo: Todo): Int {
-                return if (todo.done) {
-                    0
-                } else {
-                    if (todo.important)
-                        101
-                    else {
-                        100
-                    }
-                }
-            }
-
-        },
-        MONTHLY {
-            override fun isResetPending(todo: Todo): Boolean {
-                val today = todo.game.adjustedDate
-                val resetDay = todo.game.resetDay
-                var resetDate = today.withDayOfMonth(resetDay)
-                if (today.dayOfMonth > resetDay)
-                    resetDate = resetDate.minusMonths(1)
-                return resetDate > todo.recentResetDate
-            }
-
-            override fun getPriority(todo: Todo): Int {
-                return if (todo.done) {
-                    0
-                } else {
-                    if (todo.important)
-                        101
-                    else {
-                        100
-                    }
-                }
-            }
-
-        },
-        NORMAL {
-            override fun isResetPending(todo: Todo): Boolean {
-                return false
-            }
-
-            override fun getPriority(todo: Todo): Int {
-                return if (todo.done) {
-                    0
-                } else {
-                    if (todo.important)
-                        101
-                    else {
-                        100
-                    }
-                }
-            }
-        };
-
-        abstract fun isResetPending(todo: Todo): Boolean
-        abstract fun getPriority(todo: Todo): Int
-
-        companion object {
-            fun of(ordinal: Int): ResetType {
-                return entries[ordinal]
-            }
-        }
+    override fun toListItem(): ItemData {
+        val timeString = leftTime?.let { "남은 시간: $it" } ?: "해당없음"
+        return ItemData(
+            "$name [ $count / $goal ] ",
+            timeString,
+            game.name,
+            uuid.toString()
+        )
     }
 
 

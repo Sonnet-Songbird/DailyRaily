@@ -2,6 +2,8 @@ package com.example.dailyraily.data.model
 
 import android.content.Context
 import com.example.dailyraily.data.repository.GameDAO
+import com.example.dailyraily.ui.list.ItemData
+import com.example.dailyraily.ui.list.Listable
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,9 +14,11 @@ class Game(
     val resetDOW: DayOfWeek,
     val resetHour: Int,
     val resetDay: Int,
-) {
+): Listable {
     private val todoList: HashMap<UUID, Todo> = HashMap()
-
+    override fun toListItem(): ItemData {
+        TODO("Not yet implemented")
+    }
 
     val adjustedDate: LocalDate
         get() {
@@ -56,4 +60,5 @@ class Games {
     fun put(name: String, game: Game) {
         games.putIfAbsent(game.name, game)
     }
+
 }

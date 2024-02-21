@@ -3,6 +3,7 @@ package com.example.dailyraily.data.repository
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import com.example.dailyraily.data.model.ResetType
 import com.example.dailyraily.data.model.Todo
 import com.example.dailyraily.data.model.TodoListManager
 import java.util.UUID
@@ -64,7 +65,7 @@ class TodoDAO(context: Context) {
                 val importantBinary = cursor.getInt(importantIndex)
 
                 val game = TodoListManager.getGame(gameName) ?: throw IllegalStateException()
-                val resetType = Todo.ResetType.of(resetTypeOrdinal)
+                val resetType = ResetType.of(resetTypeOrdinal)
                 val recentResetDate = DBHelper.localDateFromText(recentResetDateTEXT)
                 val important = DBHelper.booleanFromBinary(importantBinary)
 
@@ -126,7 +127,7 @@ class TodoDAO(context: Context) {
                 val importantBinary = cursor.getInt(importantIndex)
 
                 val game = TodoListManager.getGame(gameName) ?: continue
-                val resetType = Todo.ResetType.of(resetTypeOrdinal)
+                val resetType = ResetType.of(resetTypeOrdinal)
                 val recentResetDate = DBHelper.localDateFromText(recentResetDateTEXT)
                 val important = DBHelper.booleanFromBinary(importantBinary)
 

@@ -1,7 +1,7 @@
 package com.example.dailyraily.data.model
 
+import TodoCreateDTO
 import android.content.Context
-import com.example.dailyraily.data.dto.TodoCreateDTO
 
 object TodoListManager {
     private val games: Games = Games()
@@ -17,8 +17,8 @@ object TodoListManager {
         todo.reset(context)
     }
 
-    fun creatTodo(context: Context, dto: TodoCreateDTO){
-
+    fun creatTodo(context: Context, dto: TodoCreateDTO) {
+        Todo.create(context, dto)
     }
 
 
