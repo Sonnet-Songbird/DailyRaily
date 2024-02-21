@@ -2,46 +2,30 @@ package com.example.dailyraily.data.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import com.example.dailyraily.ui.todo.TodoFragment
 import java.time.LocalDate
 import java.util.UUID
 
-@Entity(
-    tableName = "todos",
-    foreignKeys = [
-        ForeignKey(
-            entity = Game::class,
-            parentColumns = ["name"],
-            childColumns = ["gameName"]
-        )
-    ]
-)
 class Todo(
-    private val id: UUID,
+    val uuid: UUID,
     val game: Game,
-    private var name: String,
-    private var recentResetDate: LocalDate
+    var name: String,
+    var goal: Int,
+    var count: Int,
+    var resetType: ResetType,
+    var recentResetDate: LocalDate,
+    var important: Boolean,
 ) {
-    private val gameName = game.name
-    private var goal: Int = 0
-    private var count: Int = 0
-    private lateinit var resetType: ResetType
-    private var important = false
     private val _todoLiveData = MutableLiveData<Todo>()
-    val todoLiveData: LiveData<Todo> get() = _todoLiveData
+    val todoLiveData: LiveData<Todo>
+        get() = _todoLiveData
 
-    @get:Ignore
     val done: Boolean
         get() = goal <= count
 
-    @get:Ignore
     val priority: Int
         get() = resetType.getPriority(this)
 
-    @get:Ignore
     val resetPending: Boolean
         get() = resetType.isResetPending(this)
 
@@ -50,9 +34,8 @@ class Todo(
         game.register(this)
         _todoLiveData.value = this
     }
-    fun updateTodo() {
-        _todoLiveData.value = this
-    }
+
+
     constructor(
         game: Game,
         name: String,
@@ -63,11 +46,16 @@ class Todo(
         UUID.randomUUID(),
         game,
         name,
-        game.adjustedDate
-    ) {
-        this.goal = goal
-        this.resetType = resetType
-        this.important = important
+        goal,
+        0,
+        resetType,
+        game.adjustedDate,
+        important
+    )
+
+
+    fun updateTodo() {
+        _todoLiveData.value = this
     }
 
     fun reset() {
@@ -161,11 +149,28 @@ class Todo(
 
         abstract fun isResetPending(todo: Todo): Boolean
         abstract fun getPriority(todo: Todo): Int
+
+        companion object {
+            fun of(ordinal: Int): ResetType {
+                return entries[ordinal]
+            }
+        }
+    }
+
+
+    fun registerLiveDataObserver(todoFragment: TodoFragment) {
+        val viewLifecycleOwner = todoFragment.viewLifecycleOwner
+//        todoListLiveData.observe(viewLifecycleOwner) { updatedTodoList ->
+//
+//        }
+//        for (todoLiveData: LiveData<Todo> in todoListLiveData.value.orEmpty()) {
+//
+//        }
     }
 
 
     override fun toString(): String {
-        return name
+        return "$name@$game#$uuid"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -174,11 +179,11 @@ class Todo(
 
         other as Todo
 
-        return id == other.id
+        return uuid == other.uuid
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return uuid.hashCode()
     }
 
 
