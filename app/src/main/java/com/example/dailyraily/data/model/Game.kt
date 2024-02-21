@@ -7,18 +7,14 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@Entity(
-    tableName = "games",
-)
 class Game(
-    @PrimaryKey val name: String,
+    val name: String,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
     val resetDay: Int,
     val todoList: ArrayList<Todo> = ArrayList(),
 ) {
-    @get:Ignore
-    val adjustedDate: LocalDate
+       val adjustedDate: LocalDate
         get() {
             var now = LocalDateTime.now()
             if (resetHour != 0) {
