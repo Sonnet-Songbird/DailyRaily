@@ -30,8 +30,8 @@ class TodoFragment : Fragment() {
         recyclerView.layoutManager = layoutManager
 
         // RecyclerView 어댑터 초기화
-        val adapter = todoViewModel.listAdapter
-        recyclerView.adapter = adapter
+//        val adapter = todoViewModel.listAdapter
+//        recyclerView.adapter = adapter
 
         return root
     }
