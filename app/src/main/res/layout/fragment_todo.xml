@@ -8,7 +8,7 @@
 
     <include
             android:id="@+id/frame_list"
-            android:layout="@layout/frame_list"/>
+            layout="@layout/frame_list"/>
 
     <TextView
             android:id="@+id/text_todo"
