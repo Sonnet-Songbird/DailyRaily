@@ -19,7 +19,7 @@ class TodoDAO(context: Context) {
             put(DBHelper.TODO_COLUMN_NAME, todo.name)
             put(DBHelper.TODO_COLUMN_GOAL, todo.goal)
             put(DBHelper.TODO_COLUMN_COUNT, todo.count)
-            put(DBHelper.TODO_COLUMN_RESETTYPE_ORDINAL, todo.resetType.ordinal)
+            put(DBHelper.TODO_COLUMN_RESETTYPE_NAME, todo.resetType.name)
             put(DBHelper.TODO_COLUMN_RECENTRESETDATE_TEXT, DBHelper.toText(todo.recentResetDate))
             put(DBHelper.TODO_COLUMN_IMPORTANT_BINARY, DBHelper.toBinary(todo.important))
         }
@@ -48,7 +48,7 @@ class TodoDAO(context: Context) {
             val nameIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_NAME)
             val goalIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_GOAL)
             val countIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_COUNT)
-            val resetTypeIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_RESETTYPE_ORDINAL)
+            val resetTypeIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_RESETTYPE_NAME)
             val recentResetDateIndex =
                 cursor.getColumnIndex(DBHelper.TODO_COLUMN_RECENTRESETDATE_TEXT)
             val importantIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_IMPORTANT_BINARY)
@@ -60,12 +60,12 @@ class TodoDAO(context: Context) {
                 val gameName = cursor.getString(gameIndex)
                 val goal = cursor.getInt(goalIndex)
                 val count = cursor.getInt(countIndex)
-                val resetTypeOrdinal = cursor.getInt(resetTypeIndex)
+                val resetTypeName = cursor.getString(resetTypeIndex)
                 val recentResetDateTEXT = cursor.getString(recentResetDateIndex)
                 val importantBinary = cursor.getInt(importantIndex)
 
                 val game = TodoListManager.getGame(gameName) ?: throw IllegalStateException()
-                val resetType = ResetType.of(resetTypeOrdinal)
+                val resetType = ResetType.of(resetTypeName)
                 val recentResetDate = DBHelper.localDateFromText(recentResetDateTEXT)
                 val important = DBHelper.booleanFromBinary(importantBinary)
 
@@ -110,7 +110,7 @@ class TodoDAO(context: Context) {
         val countIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_COUNT)
         val recentResetDateIndex =
             cursor.getColumnIndex(DBHelper.TODO_COLUMN_RECENTRESETDATE_TEXT)
-        val resetTypeIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_RESETTYPE_ORDINAL)
+        val resetTypeIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_RESETTYPE_NAME)
 
         val importantIndex = cursor.getColumnIndex(DBHelper.TODO_COLUMN_IMPORTANT_BINARY)
         if (nameIndex != -1 && gameIndex != -1 && goalIndex != -1
@@ -122,12 +122,12 @@ class TodoDAO(context: Context) {
                 val gameName = cursor.getString(gameIndex)
                 val goal = cursor.getInt(goalIndex)
                 val count = cursor.getInt(countIndex)
-                val resetTypeOrdinal = cursor.getInt(resetTypeIndex)
+                val resetTypeName = cursor.getString(resetTypeIndex)
                 val recentResetDateTEXT = cursor.getString(recentResetDateIndex)
                 val importantBinary = cursor.getInt(importantIndex)
 
                 val game = TodoListManager.getGame(gameName) ?: continue
-                val resetType = ResetType.of(resetTypeOrdinal)
+                val resetType = ResetType.of(resetTypeName)
                 val recentResetDate = DBHelper.localDateFromText(recentResetDateTEXT)
                 val important = DBHelper.booleanFromBinary(importantBinary)
 
@@ -162,7 +162,7 @@ class TodoDAO(context: Context) {
             put(DBHelper.TODO_COLUMN_NAME, todo.name)
             put(DBHelper.TODO_COLUMN_GOAL, todo.goal)
             put(DBHelper.TODO_COLUMN_COUNT, todo.count)
-            put(DBHelper.TODO_COLUMN_RESETTYPE_ORDINAL, todo.resetType.ordinal)
+            put(DBHelper.TODO_COLUMN_RESETTYPE_NAME, todo.resetType.name)
             put(DBHelper.TODO_COLUMN_RECENTRESETDATE_TEXT, DBHelper.toText(todo.recentResetDate))
             put(DBHelper.TODO_COLUMN_IMPORTANT_BINARY, DBHelper.toBinary(todo.important))
         }

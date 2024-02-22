@@ -107,8 +107,8 @@ enum class ResetType {
     abstract fun getPriority(todo: Todo): Int
 
     companion object {
-        fun of(ordinal: Int): ResetType {
-            return entries[ordinal]
+        fun of(name: String): ResetType {
+            return valueOf(name)
         }
     }
 }

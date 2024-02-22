@@ -43,7 +43,7 @@ class DBHelper(val context: Context) :
         const val TODO_COLUMN_NAME = "name"
         const val TODO_COLUMN_GOAL = "goal"
         const val TODO_COLUMN_COUNT = "count"
-        const val TODO_COLUMN_RESETTYPE_ORDINAL = "reset_type_ordinal"
+        const val TODO_COLUMN_RESETTYPE_NAME = "reset_type_name"
         const val TODO_COLUMN_RECENTRESETDATE_TEXT = "recent_reset_date_text"
         const val TODO_COLUMN_IMPORTANT_BINARY = "important_binary"
 
@@ -55,7 +55,7 @@ class DBHelper(val context: Context) :
                 $TODO_COLUMN_NAME TEXT,
                 $TODO_COLUMN_GOAL INTEGER,
                 $TODO_COLUMN_COUNT INTEGER,
-                $TODO_COLUMN_RESETTYPE_ORDINAL INTEGER,
+                $TODO_COLUMN_RESETTYPE_NAME INTEGER,
                 $TODO_COLUMN_RECENTRESETDATE_TEXT TEXT,
                 $TODO_COLUMN_IMPORTANT_BINARY INTEGER
             )
