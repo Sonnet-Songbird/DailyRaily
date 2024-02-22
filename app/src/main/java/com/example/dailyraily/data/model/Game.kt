@@ -110,6 +110,10 @@ class Games {
         this.games[game.name] = game
     }
 
+    fun getAllGame(): List<Game> {
+        return games.values.toList()
+    }
+
     fun deregister(name: String) {
         this.games.remove(name)
     }

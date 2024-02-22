@@ -9,7 +9,17 @@
 
     <string name="menu_todo">Todo</string>
     <string name="menu_game">Game</string>
-    <string name="menu_home">Home</string>
+    <string name="menu_filter">(PlaceHolder)</string>
     <string name="fab">fab</string>
     <string name="no_reset_time">해당 없음</string>
+
+    <string name="choose_game">게임 선택</string>
+    <string name="enter_name">이름 입력</string>
+    <string name="choose_reset_type">리셋 타입 선택</string>
+    <string name="enter_goal">목표 입력 (99 이하의 숫자)</string>
+    <string name="important_checkbox">중요 여부</string>
+    <string name="choose_day_of_week">요일 선택</string>
+    <string name="register_button">등록</string>
+    <string name="enter_date">초기화 날짜를 입력해주세요.</string>
+    <string name="enter_time">초기화 시간을 입력해주세요.</string>
 </resources>

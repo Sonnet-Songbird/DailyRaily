@@ -20,6 +20,7 @@ object TodoListManager {
         Todo.loadAllTodos(context)
     }
 
+
     fun registerGame(game: Game) {
         games.register(game)
     }
@@ -36,6 +37,9 @@ object TodoListManager {
         return game.getTodo(uuid) ?: throw IllegalArgumentException("No Such Todo ${uuid}")
     }
 
+    fun getAllGame(): List<Game> {
+        return games.getAllGame()
+    }
 
     fun createGame(context: Context, dto: GameCreateDTO) {
         Game.create(context, dto)
@@ -65,5 +69,6 @@ object TodoListManager {
     fun removeTodo(context: Context, dto: TodoRemoveDTO) {
         getTodo(getGame(dto.gameName), dto.uuid).remove(context)
     }
+
 
 }
