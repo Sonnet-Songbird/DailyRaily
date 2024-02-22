@@ -85,7 +85,7 @@ class Todo(
 
 
     override fun toListItem(): ItemDTO {
-        val timeString = leftTime?.let { formatTimeString(it) } ?: R.string.no_reset_time.toString()
+        val timeString = leftTimeString()
         return ItemDTO(
             "$name [ $count / $goal ] ",
             timeString,
@@ -94,7 +94,8 @@ class Todo(
         )
     }
 
-    private fun formatTimeString(duration: Duration): String {
+    fun leftTimeString(): String {
+        val duration = leftTime ?: throw IllegalStateException()
         val days = duration.toDays()
         val hours = duration.toHours() % 24
         val minutes = duration.toMinutes() % 60
