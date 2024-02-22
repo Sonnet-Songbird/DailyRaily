@@ -2,6 +2,7 @@ package com.example.dailyraily.data.model
 
 import TodoCreateDTO
 import android.content.Context
+import com.example.dailyraily.R
 import com.example.dailyraily.data.repository.TodoDAO
 import com.example.dailyraily.ui.list.ItemData
 import com.example.dailyraily.ui.list.Listable
@@ -84,7 +85,7 @@ class Todo(
 
 
     override fun toListItem(): ItemData {
-        val timeString = leftTime?.let { "남은 시간: $it" } ?: "해당없음"
+        val timeString = leftTime?.let { "남은 시간: $it" } ?: R.string.no_reset_time.toString()
         return ItemData(
             "$name [ $count / $goal ] ",
             timeString,

@@ -11,4 +11,5 @@
     <string name="menu_game">Game</string>
     <string name="menu_home">Home</string>
     <string name="fab">fab</string>
+    <string name="no_reset_time">해당 없음</string>
 </resources>
