@@ -1,6 +1,7 @@
 package com.example.dailyraily.data.model
 
 import android.content.Context
+import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.repository.GameDAO
 import com.example.dailyraily.ui.list.ItemData
 import com.example.dailyraily.ui.list.Listable
@@ -14,7 +15,11 @@ class Game(
     val resetDOW: DayOfWeek,
     val resetHour: Int,
     val resetDay: Int,
-): Listable {
+) : Listable {
+    init {
+        TodoListManager.registerGame(this)
+    }
+
     private val todoList: HashMap<UUID, Todo> = HashMap()
     override fun toListItem(): ItemData {
         TODO("Not yet implemented")
@@ -39,18 +44,26 @@ class Game(
     fun register(todos: Array<Todo>) {
         todos.forEach { v -> register(v) }
     }
+
+    companion object {
+        fun create(context: Context, dto: GameCreateDTO) {
+
+        }
+    }
 }
 
 
 class Games {
     private val games = HashMap<String, Game>()
+    fun register(game: Game) {
+        this.games[game.name] = game
+    }
 
     fun loadAllGames(context: Context) {
         val gameQuery = GameDAO(context).getAllGames()
         gameQuery.forEach { game ->
             put(game.name, game)
         }
-        Todo.loadAllTodos(context)
     }
 
     fun get(name: String): Game? {
