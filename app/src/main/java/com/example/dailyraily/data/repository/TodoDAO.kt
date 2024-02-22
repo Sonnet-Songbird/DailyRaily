@@ -176,7 +176,7 @@ class TodoDAO(context: Context) {
         db.close()
     }
 
-    fun deleteTodoById(uuid: UUID) {
+    fun deleteTodo(uuid: UUID) {
         val db = dbHelper.writableDatabase
         db.delete(
             DBHelper.TABLE_TODOS,

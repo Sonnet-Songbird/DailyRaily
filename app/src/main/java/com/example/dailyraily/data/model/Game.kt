@@ -3,10 +3,10 @@ package com.example.dailyraily.data.model
 import TodoListWithPriority
 import android.content.Context
 import com.example.dailyraily.data.dto.GameCreateDTO
+import com.example.dailyraily.data.dto.GameUpdateDTO
 import com.example.dailyraily.data.repository.GameDAO
 import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemDTO
-import com.example.dailyraily.ui.list.ListAdapter
 import com.example.dailyraily.ui.list.Listable
 import com.example.dailyraily.ui.list.dowToString
 import java.time.DayOfWeek
@@ -16,9 +16,9 @@ import java.util.UUID
 
 class Game(
     val name: String,
-    val resetDay: Int,
-    val resetDOW: DayOfWeek,
-    val resetHour: Int,
+    var resetDay: Int,
+    var resetDOW: DayOfWeek,
+    var resetHour: Int,
 ) : Listable {
     init {
         TodoListManager.registerGame(this)
@@ -37,6 +37,9 @@ class Game(
         )
     }
 
+    fun getTodo(uuid: UUID): Todo? {
+        return todoList[uuid]
+    }
 
     val countTodo: Int
         get() {
@@ -65,12 +68,38 @@ class Game(
         this.todoList[todo.uuid] = todo
     }
 
+    fun deregister(uuid: UUID) {
+        todoList.remove(uuid)
+    }
+
     companion object {
         fun create(context: Context, dto: GameCreateDTO) {
             val dao = GameDAO(context)
             dao.insertGame(Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour))
         }
     }
+
+    fun update(context: Context, dto: GameUpdateDTO) {
+        this.resetDOW = dto.resetDOW
+        this.resetHour = dto.resetHour
+        this.resetDay = dto.resetDay
+        updateDB(context)
+    }
+
+    fun remove(context: Context) {
+        val dao = GameDAO(context)
+        todoList.values.forEach { it.remove(context) }
+        TodoListManager.deregisterGame(this.name)
+        dao.deleteGame(name)
+    }
+
+
+    private fun updateDB(context: Context) {
+        val dao = GameDAO(context)
+        dao.updateGame(this)
+    }
+
+
 }
 
 
@@ -78,6 +107,10 @@ class Games {
     private val games = HashMap<String, Game>()
     fun register(game: Game) {
         this.games[game.name] = game
+    }
+
+    fun deregister(name: String) {
+        this.games.remove(name)
     }
 
     fun loadAllGames(context: Context) {

@@ -1,14 +1,29 @@
-import com.example.dailyraily.data.model.Game
 import com.example.dailyraily.data.model.ResetType
 import com.example.dailyraily.data.model.Todo
+import java.util.UUID
 
 data class TodoCreateDTO(
-    val game: Game,
+    val gameName: String,
     val name: String,
     val goal: Int,
     val resetType: ResetType,
     val important: Boolean
 )
+
+data class TodoUpdateDTO(
+    val gameName: String,
+    val uuid: UUID,
+    val name: String,
+    val goal: Int,
+    val resetType: ResetType,
+    val important: Boolean
+)
+
+data class TodoRemoveDTO(
+    val gameName: String,
+    val uuid: UUID
+)
+
 
 data class TodoListWithPriority private constructor(var sortedTodoList: List<Todo>) {
 

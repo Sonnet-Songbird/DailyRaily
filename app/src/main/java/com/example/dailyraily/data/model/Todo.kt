@@ -1,9 +1,10 @@
 package com.example.dailyraily.data.model
 
 import TodoCreateDTO
+import TodoUpdateDTO
 import android.content.Context
-import com.example.dailyraily.R
 import com.example.dailyraily.data.repository.TodoDAO
+import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemDTO
 import com.example.dailyraily.ui.list.Listable
 import java.time.Duration
@@ -59,6 +60,22 @@ class Todo(
         important
     )
 
+    fun update(context: Context, dto: TodoUpdateDTO) {
+        this.name = dto.name
+        this.goal = dto.goal
+        this.resetType = dto.resetType
+        this.important = dto.important
+
+        updateDB(context)
+    }
+
+    fun reset(context: Context) {
+        count = 0
+        recentResetDate = game.adjustedDate
+
+        updateDB(context)
+    }
+
     companion object {
         /** Loads only if the game to be connected is already loaded. */
         fun loadAllTodos(context: Context): List<Todo> {
@@ -67,20 +84,21 @@ class Todo(
 
         fun create(context: Context, dto: TodoCreateDTO) {
             val dao = TodoDAO(context)
-            dao.insertTodo(Todo(dto.game, dto.name, dto.goal, dto.resetType, dto.important))
+            val game = TodoListManager.getGame(dto.gameName)
+            dao.insertTodo(Todo(game, dto.name, dto.goal, dto.resetType, dto.important))
         }
     }
 
-    private fun update(context: Context) {
+    fun remove(context: Context) {
         val dao = TodoDAO(context)
-        dao.updateTodo(this)
+        game.deregister(uuid)
+
+        dao.deleteTodo(uuid)
     }
 
-    fun reset(context: Context) {
-        count = 0
-        recentResetDate = game.adjustedDate
-
-        update(context)
+    private fun updateDB(context: Context) {
+        val dao = TodoDAO(context)
+        dao.updateTodo(this)
     }
 
 
