@@ -1,11 +1,14 @@
 package com.example.dailyraily.data.model
 
+import TodoListWithPriority
 import android.content.Context
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.repository.GameDAO
 import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemDTO
+import com.example.dailyraily.ui.list.ListAdapter
 import com.example.dailyraily.ui.list.Listable
+import com.example.dailyraily.ui.list.dowToString
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -23,8 +26,28 @@ class Game(
 
     private val todoList: HashMap<UUID, Todo> = HashMap()
     override fun toListItem(): ItemDTO {
-        TODO("Not yet implemented")
+        val todo = TodoListWithPriority.make(todoList.values.toList()).sortedTodoList[0]
+        val thirdColumn = todo.let { "${it.name} ${it.leftTimeString()}" }
+
+        return ItemDTO(
+            "${name} [${countDoneTodo}/{$countTodo}]",
+            "${resetHour}시 / ${dowToString(resetDOW)} / ${resetDay}일",
+            thirdColumn,
+            name
+        )
     }
+
+
+    val countTodo: Int
+        get() {
+            return todoList.size
+        }
+
+    val countDoneTodo: Int
+        get() {
+            return todoList.values.count { it.done }
+        }
+
 
     val adjustedDate: LocalDate
         get() {

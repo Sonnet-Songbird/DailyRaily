@@ -1,11 +1,13 @@
 package com.example.dailyraily.ui.list
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dailyraily.R
+import java.time.DayOfWeek
 
 class ListAdapter(private val data: List<Listable>) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
@@ -18,6 +20,7 @@ class ListAdapter(private val data: List<Listable>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(data[position])
+
     }
 
     override fun getItemCount(): Int = data.size
@@ -33,6 +36,18 @@ class ListAdapter(private val data: List<Listable>) :
 
 interface Listable {
     fun toListItem(): ItemDTO
+}
+
+fun dowToString(dow: DayOfWeek): String {
+    return when (dow) {
+        DayOfWeek.MONDAY -> "월요일"
+        DayOfWeek.TUESDAY -> "화요일"
+        DayOfWeek.WEDNESDAY -> "수요일"
+        DayOfWeek.THURSDAY -> "목요일"
+        DayOfWeek.FRIDAY -> "금요일"
+        DayOfWeek.SATURDAY -> "토요일"
+        DayOfWeek.SUNDAY -> "일요일"
+    }
 }
 
 data class ItemDTO(
