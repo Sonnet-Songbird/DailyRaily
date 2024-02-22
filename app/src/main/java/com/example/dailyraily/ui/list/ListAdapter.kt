@@ -25,10 +25,15 @@ class ListAdapter(private val data: List<Listable>) :
     override fun getItemCount(): Int = data.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(R.id.textView)
+        private val textView1: TextView = itemView.findViewById(R.id.textView1)
+        private val textView2: TextView = itemView.findViewById(R.id.textView2)
+        private val textView3: TextView = itemView.findViewById(R.id.textView3)
 
         fun bind(item: Listable) {
-            textView.text = item.toListItem().columnOne
+            val dto = item.toListItem()
+            textView1.text = dto.columnOne
+            textView2.text = dto.columnOne
+            textView3.text = dto.columnOne
         }
     }
 }
@@ -49,9 +54,16 @@ fun dowToString(dow: DayOfWeek): String {
     }
 }
 
+
 data class ItemDTO(
     val columnOne: String,
     val columnTwo: String,
     val columnThree: String,
-    val id: String
-)
+    val id: String,
+    val type: ItemType
+) {
+    enum class ItemType {
+        GAME,
+        TODO
+    }
+}

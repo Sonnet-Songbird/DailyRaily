@@ -4,42 +4,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
         tools:background="#40000000">
 
 
     <LinearLayout
-            android:id="@+id/countLayout"
+            android:id="@+id/itemLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
-        <TextView
-                android:id="@+id/textView"
+
+        <LinearLayout
+                android:id="@+id/TextContainer"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
 
-        <!-- Checkbox for goal <= 1 -->
-        <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
-        <!-- Count for goal >= 2 -->
-        <TextView
-                android:id="@+id/countTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone" />
+            <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/CountContainer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+
+            <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:visibility="gone" />
+
+            <TextView
+                    android:id="@+id/countTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text=""
+                    android:ems="5"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
     <View
             android:id="@+id/strokeLine"

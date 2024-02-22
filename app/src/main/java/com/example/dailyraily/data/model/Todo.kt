@@ -108,7 +108,7 @@ class Todo(
             "$name [ $count / $goal ] ",
             timeString,
             game.name,
-            uuid.toString()
+            uuid.toString(), ItemDTO.ItemType.TODO
         )
     }
 

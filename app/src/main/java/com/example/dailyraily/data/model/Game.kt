@@ -33,7 +33,8 @@ class Game(
             "${name} [${countDoneTodo}/{$countTodo}]",
             "${resetHour}시 / ${dowToString(resetDOW)} / ${resetDay}일",
             thirdColumn,
-            name
+            name,
+            ItemDTO.ItemType.GAME
         )
     }
 

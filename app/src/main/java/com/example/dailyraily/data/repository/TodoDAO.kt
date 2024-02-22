@@ -126,7 +126,7 @@ class TodoDAO(context: Context) {
                 val recentResetDateTEXT = cursor.getString(recentResetDateIndex)
                 val importantBinary = cursor.getInt(importantIndex)
 
-                val game = TodoListManager.getGame(gameName) ?: continue
+                val game = TodoListManager.getGame(gameName)
                 val resetType = ResetType.of(resetTypeName)
                 val recentResetDate = DBHelper.localDateFromText(recentResetDateTEXT)
                 val important = DBHelper.booleanFromBinary(importantBinary)
