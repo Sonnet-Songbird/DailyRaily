@@ -32,10 +32,10 @@ class ListAdapter(private val data: List<Listable>) :
 }
 
 interface Listable {
-    fun toListItem(): ItemData
+    fun toListItem(): ItemDTO
 }
 
-data class ItemData(
+data class ItemDTO(
     val columnOne: String,
     val columnTwo: String,
     val columnThree: String,

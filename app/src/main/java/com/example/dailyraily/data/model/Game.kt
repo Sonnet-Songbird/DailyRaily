@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.repository.GameDAO
 import com.example.dailyraily.data.service.TodoListManager
-import com.example.dailyraily.ui.list.ItemData
+import com.example.dailyraily.ui.list.ItemDTO
 import com.example.dailyraily.ui.list.Listable
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -22,7 +22,7 @@ class Game(
     }
 
     private val todoList: HashMap<UUID, Todo> = HashMap()
-    override fun toListItem(): ItemData {
+    override fun toListItem(): ItemDTO {
         TODO("Not yet implemented")
     }
 
