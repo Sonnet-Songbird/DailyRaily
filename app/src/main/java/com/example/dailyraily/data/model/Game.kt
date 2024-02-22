@@ -12,9 +12,9 @@ import java.util.UUID
 
 class Game(
     val name: String,
+    val resetDay: Int,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
-    val resetDay: Int,
 ) : Listable {
     init {
         TodoListManager.registerGame(this)
@@ -47,7 +47,7 @@ class Game(
 
     companion object {
         fun create(context: Context, dto: GameCreateDTO) {
-
+            Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour)
         }
     }
 }

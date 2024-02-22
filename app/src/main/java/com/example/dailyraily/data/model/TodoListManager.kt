@@ -25,8 +25,12 @@ object TodoListManager {
         todo.reset(context)
     }
 
-    fun creatTodo(context: Context, dto: TodoCreateDTO) {
+    fun createTodo(context: Context, dto: TodoCreateDTO) {
         Todo.create(context, dto)
+    }
+
+    fun createGame(context: Context, dto: GameCreateDTO) {
+        Game.create(context, dto)
     }
 
 
