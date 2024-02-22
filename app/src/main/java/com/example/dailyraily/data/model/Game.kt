@@ -41,13 +41,10 @@ class Game(
         this.todoList[todo.uuid] = todo
     }
 
-    fun register(todos: Array<Todo>) {
-        todos.forEach { v -> register(v) }
-    }
-
     companion object {
         fun create(context: Context, dto: GameCreateDTO) {
-            Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour)
+            val dao = GameDAO(context)
+            dao.insertGame(Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour))
         }
     }
 }
