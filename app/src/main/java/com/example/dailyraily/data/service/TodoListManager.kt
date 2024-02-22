@@ -1,8 +1,11 @@
-package com.example.dailyraily.data.model
+package com.example.dailyraily.data.service
 
 import TodoCreateDTO
 import android.content.Context
 import com.example.dailyraily.data.dto.GameCreateDTO
+import com.example.dailyraily.data.model.Game
+import com.example.dailyraily.data.model.Games
+import com.example.dailyraily.data.model.Todo
 
 object TodoListManager {
 

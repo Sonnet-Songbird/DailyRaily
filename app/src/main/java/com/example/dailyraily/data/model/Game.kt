@@ -3,6 +3,7 @@ package com.example.dailyraily.data.model
 import android.content.Context
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.repository.GameDAO
+import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemData
 import com.example.dailyraily.ui.list.Listable
 import java.time.DayOfWeek

@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import com.example.dailyraily.data.model.ResetType
 import com.example.dailyraily.data.model.Todo
-import com.example.dailyraily.data.model.TodoListManager
+import com.example.dailyraily.data.service.TodoListManager
 import java.util.UUID
 
 class TodoDAO(context: Context) {
