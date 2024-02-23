@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dailyraily.databinding.FragmentGameBinding
+import com.example.dailyraily.ui.list.ListAdapter
 
 class GameFragment : Fragment() {
-
     private var _binding: FragmentGameBinding? = null
+
+    private lateinit var viewModel: GameViewModel
+    private lateinit var recyclerView: RecyclerView
 
     private val binding get() = _binding!!
 
@@ -20,18 +24,28 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val gameViewModel =
-            ViewModelProvider(this).get(GameViewModel::class.java)
-
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textGame
-        gameViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+
+
         return root
     }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView = binding.frameList.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        viewModel = ViewModelProvider(this)[GameViewModel::class.java]
+
+        // Set up the GameAdapter with appropriate data
+        recyclerView.adapter = ListAdapter(viewModel.data)
+        recyclerView.visibility = View.VISIBLE
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

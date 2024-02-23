@@ -3,6 +3,7 @@ package com.example.dailyraily.data.repository
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.util.Log
 import com.example.dailyraily.data.model.Game
 import java.time.DayOfWeek
 
@@ -14,8 +15,10 @@ class GameDAO(context: Context) {
         val values = ContentValues().apply {
             put(DBHelper.GAME_COLUMN_NAME, game.name)
             put(DBHelper.GAME_COLUMN_RESETDAY, game.resetDay)
-            put(DBHelper.GAME_COLUMN_RESETDOW_ORDINAL, game.resetDOW.ordinal)
+            put(DBHelper.GAME_COLUMN_RESETDOW_TEXT, game.resetDOW.name)
             put(DBHelper.GAME_COLUMN_RESETHOUR, game.resetHour)
+
+            Log.d("test", "insert ${game.resetDOW.name}")
         }
 
         db.insert(DBHelper.TABLE_GAMES, null, values)
@@ -40,16 +43,20 @@ class GameDAO(context: Context) {
         if (cursor.moveToFirst()) {
             val nameIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_NAME)
             val resetDayIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDAY)
-            val resetDOWIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDOW_ORDINAL)
+            val resetDOWIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDOW_TEXT)
             val resetHourIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETHOUR)
 
             if (nameIndex != -1 && resetHourIndex != -1 && resetDOWIndex != -1 && resetDayIndex != -1) {
                 val gameName = cursor.getString(nameIndex)
                 val resetDay = cursor.getInt(resetDayIndex)
-                val resetDOW = cursor.getInt(resetDOWIndex)
+                val resetDOW = cursor.getString(resetDOWIndex)
                 val resetHour = cursor.getInt(resetHourIndex)
+                try {
+                    game = Game(gameName, resetDay, DayOfWeek.valueOf(resetDOW), resetHour)
 
-                game = Game(gameName, resetDay, DayOfWeek.of(resetDOW), resetHour)
+                } catch (e: Exception) {
+                    deleteGame(gameName)
+                }
             } else {
                 throw IllegalStateException()
             }
@@ -69,16 +76,21 @@ class GameDAO(context: Context) {
         while (cursor.moveToNext()) {
             val nameIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_NAME)
             val resetDayIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDAY)
-            val resetDOWIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDOW_ORDINAL)
+            val resetDOWIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETDOW_TEXT)
             val resetHourIndex = cursor.getColumnIndex(DBHelper.GAME_COLUMN_RESETHOUR)
 
             if (nameIndex != -1 && resetHourIndex != -1 && resetDOWIndex != -1 && resetDayIndex != -1) {
                 val gameName = cursor.getString(nameIndex)
                 val resetDay = cursor.getInt(resetDayIndex)
-                val resetDOW = cursor.getInt(resetDOWIndex)
+                val resetDOW = cursor.getString(resetDOWIndex)
                 val resetHour = cursor.getInt(resetHourIndex)
+                try {
+                    games.add(Game(gameName, resetDay, DayOfWeek.valueOf(resetDOW), resetHour))
+                } catch (e: Exception) {
+                    Log.d("test", "getAll ${resetDOW}")
 
-                games.add(Game(gameName, resetDay, DayOfWeek.of(resetDOW), resetHour))
+                    deleteGame(gameName)
+                }
             } else {
                 throw IllegalStateException()
             }
@@ -95,7 +107,7 @@ class GameDAO(context: Context) {
         val values = ContentValues().apply {
             put(DBHelper.GAME_COLUMN_NAME, game.name)
             put(DBHelper.GAME_COLUMN_RESETDAY, game.resetDay)
-            put(DBHelper.GAME_COLUMN_RESETDOW_ORDINAL, game.resetDOW.ordinal)
+            put(DBHelper.GAME_COLUMN_RESETDOW_TEXT, game.resetDOW.name)
             put(DBHelper.GAME_COLUMN_RESETHOUR, game.resetHour)
         }
         db.update(

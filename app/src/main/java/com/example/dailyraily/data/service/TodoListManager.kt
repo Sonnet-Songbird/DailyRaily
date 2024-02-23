@@ -1,6 +1,7 @@
 package com.example.dailyraily.data.service
 
 import TodoCreateDTO
+import TodoListWithPriority
 import TodoRemoveDTO
 import TodoUpdateDTO
 import android.content.Context
@@ -71,4 +72,22 @@ object TodoListManager {
     }
 
 
+    fun getMostPriorityTodo(): Todo {
+        return TodoListWithPriority.make(getAllTodos()).sortedTodoList[0]
+    }
+
+    private fun getAllTodos(): List<Todo> {
+        val todos = ArrayList<Todo>()
+        for (game in getAllGame()) {
+            for (todo in game.todoList) {
+                todos.add(todo)
+            }
+        }
+        return todos.toList()
+    }
+
+    fun getMostPriorityGame(pickedGameAmount: Int, checkedTodoAmount: Int): List<Game> {
+        return getAllGame().sortedByDescending { it.getTodoPrioritySum(checkedTodoAmount) }
+            .take(pickedGameAmount)
+    }
 }

@@ -67,3 +67,10 @@ data class ItemDTO(
         TODO
     }
 }
+
+data class HeaderTodoDTO(
+    val columnOne: String,
+    val columnTwo: String,
+    val columnThree: String,
+    val id: String,
+)

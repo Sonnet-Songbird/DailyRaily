@@ -4,16 +4,16 @@ import java.time.DayOfWeek
 
 data class GameCreateDTO(
     val name: String,
+    val resetDay: Int,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
-    val resetDay: Int,
 )
 
 data class GameUpdateDTO(
     val name: String,
+    val resetDay: Int,
     val resetDOW: DayOfWeek,
     val resetHour: Int,
-    val resetDay: Int,
 )
 
 data class GameRemoveDTO(

@@ -24,14 +24,14 @@ class DBHelper(val context: Context) :
         const val TABLE_GAMES = "games"
         const val GAME_COLUMN_NAME = "name"
         const val GAME_COLUMN_RESETDAY = "reset_day"
-        const val GAME_COLUMN_RESETDOW_ORDINAL = "reset_dow_ordinal"
+        const val GAME_COLUMN_RESETDOW_TEXT = "reset_dow_text"
         const val GAME_COLUMN_RESETHOUR = "reset_hour"
 
         private val createGameTableQuery = """
             CREATE TABLE $TABLE_GAMES (
                 $GAME_COLUMN_NAME TEXT PRIMARY KEY,
                 $GAME_COLUMN_RESETDAY INTEGER,
-                $GAME_COLUMN_RESETDOW_ORDINAL INTEGER,
+                $GAME_COLUMN_RESETDOW_TEXT TEXT,
                 $GAME_COLUMN_RESETHOUR INTEGER
             )
         """.trimIndent()
