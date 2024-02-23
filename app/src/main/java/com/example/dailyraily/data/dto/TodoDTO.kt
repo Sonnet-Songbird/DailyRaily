@@ -21,7 +21,7 @@ data class TodoUpdateDTO(
 
 data class TodoRemoveDTO(
     val gameName: String,
-    val uuid: UUID
+    val uuid: String
 )
 
 

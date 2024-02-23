@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/itemFrame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        tools:background="#40000000">
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground">
+
 
 
     <LinearLayout
@@ -55,8 +59,8 @@
 
         <LinearLayout
                 android:id="@+id/CountContainer"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:gravity="center">
 
@@ -79,7 +83,6 @@
                     android:visibility="gone" />
 
         </LinearLayout>
-
     </LinearLayout>
 
 

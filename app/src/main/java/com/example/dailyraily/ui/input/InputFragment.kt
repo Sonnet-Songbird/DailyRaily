@@ -228,4 +228,6 @@ class InputFragment : Fragment() {
     private fun clearArgument() {
         arguments?.clear()
     }
+
+
 }

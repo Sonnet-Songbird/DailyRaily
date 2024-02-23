@@ -5,6 +5,8 @@ import TodoListWithPriority
 import TodoRemoveDTO
 import TodoUpdateDTO
 import android.content.Context
+import android.system.Os.remove
+import android.util.Log
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.dto.GameRemoveDTO
 import com.example.dailyraily.data.dto.GameUpdateDTO
@@ -63,17 +65,28 @@ object TodoListManager {
         getTodo(getGame(dto.gameName), dto.uuid).update(context, dto)
     }
 
-    fun resetTodo(context: Context, todo: Todo) {
-        todo.reset(context)
-    }
-
     fun removeTodo(context: Context, dto: TodoRemoveDTO) {
-        getTodo(getGame(dto.gameName), dto.uuid).remove(context)
+        val todo = getTodo(getGame(dto.gameName), UUID.fromString(dto.uuid))
+        todo.remove(context)
     }
 
 
     fun getMostPriorityTodo(): Todo {
-        return TodoListWithPriority.make(getAllTodos()).sortedTodoList[0]
+        return getAllTodosWithPriority()[0]
+    }
+
+    fun getAllTodosWithPriority(): List<Todo> {
+        return TodoListWithPriority.make(getAllTodos()).sortedTodoList
+    }
+
+    fun countTodo(context: Context, game: String, uuid: String) {
+        getTodo(getGame(game), UUID.fromString(uuid)).count(context)
+    }
+    fun discountTodo(context: Context, game: String, uuid: String) {
+        getTodo(getGame(game), UUID.fromString(uuid)).discount(context)
+    }
+    fun resetTodo(context: Context, game: String, uuid: String) {
+        getTodo(getGame(game), UUID.fromString(uuid)).reset(context)
     }
 
     private fun getAllTodos(): List<Todo> {
@@ -89,5 +102,9 @@ object TodoListManager {
     fun getMostPriorityGame(pickedGameAmount: Int, checkedTodoAmount: Int): List<Game> {
         return getAllGame().sortedByDescending { it.getTodoPrioritySum(checkedTodoAmount) }
             .take(pickedGameAmount)
+    }
+
+    fun getTodos(gameName: String): List<Todo> {
+        return getGame(gameName).todoList
     }
 }

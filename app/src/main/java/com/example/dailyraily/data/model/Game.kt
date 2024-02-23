@@ -32,16 +32,22 @@ class Game(
         get() = TodoListWithPriority.make(todoList).sortedTodoList
 
     override fun toListItem(): ItemDTO {
-        val todo = TodoListWithPriority.make(_todoList.values.toList()).sortedTodoList[0]
-        val thirdColumn = todo.let { "${it.name} ${it.leftTimeString()}" }
+        val sortedTodoList = TodoListWithPriority.make(_todoList.values.toList()).sortedTodoList
+        val thirdColumn =
+            sortedTodoList.getOrNull(0)?.let { "${it.name} ${it.leftTimeString()}" } ?: ""
+
 
         return ItemDTO(
-            "${name} [${countDoneTodo}/{$countTodo}]",
+            "${name} [${countDoneTodo}/${countTodo}]",
             "${resetHour}시 / ${dowToString(resetDOW)} / ${resetDay}일",
             thirdColumn,
             name,
             ItemDTO.ItemType.GAME
         )
+    }
+
+    override fun getId(): String {
+        return name
     }
 
     fun getTodo(uuid: UUID): Todo? {

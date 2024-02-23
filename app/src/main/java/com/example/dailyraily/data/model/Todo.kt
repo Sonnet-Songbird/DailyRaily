@@ -3,6 +3,7 @@ package com.example.dailyraily.data.model
 import TodoCreateDTO
 import TodoUpdateDTO
 import android.content.Context
+import android.util.Log
 import com.example.dailyraily.data.repository.TodoDAO
 import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemDTO
@@ -72,9 +73,20 @@ class Todo(
     fun reset(context: Context) {
         count = 0
         recentResetDate = game.adjustedDate
-
         updateDB(context)
     }
+
+    //TODO 이벤트 리스너 문제 해결되면 삭제
+    fun discount(context: Context) {
+        count--
+        updateDB(context)
+    }
+
+    fun count(context: Context) {
+        count++
+        updateDB(context)
+    }
+
 
     companion object {
         /** Loads only if the game to be connected is already loaded. */
@@ -110,6 +122,10 @@ class Todo(
             game.name,
             uuid.toString(), ItemDTO.ItemType.TODO
         )
+    }
+
+    override fun getId(): String {
+        return "${game.name}|${uuid}"
     }
 
     fun leftTimeString(): String {

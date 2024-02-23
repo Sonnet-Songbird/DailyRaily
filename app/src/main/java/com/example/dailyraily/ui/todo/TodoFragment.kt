@@ -27,8 +27,6 @@ class TodoFragment : Fragment() {
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
-
         return root
     }
 
@@ -41,8 +39,13 @@ class TodoFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
 
-        // Set up the GameAdapter with appropriate data
-        recyclerView.adapter = ListAdapter(viewModel.data)
+        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
+        recyclerView.visibility = View.VISIBLE
+    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateData()
+        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
         recyclerView.visibility = View.VISIBLE
     }
 

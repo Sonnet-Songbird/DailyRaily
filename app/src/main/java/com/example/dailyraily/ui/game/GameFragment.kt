@@ -41,8 +41,13 @@ class GameFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
 
-        // Set up the GameAdapter with appropriate data
-        recyclerView.adapter = ListAdapter(viewModel.data)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateData()
+        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
         recyclerView.visibility = View.VISIBLE
     }
 
