@@ -6,7 +6,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.game.GameFragment">
 
-    <include layout="@layout/frame_list" />
+    <include
+            android:id="@+id/frame_list"
+            layout="@layout/frame_list" />
 
     <TextView
             android:id="@+id/text_game"

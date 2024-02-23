@@ -3,7 +3,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+            android:id="@+id/drawer_menu">
         <item
                 android:id="@+id/nav_todo"
                 android:icon="@drawable/ic_menu_todo"
@@ -13,7 +14,7 @@
                 android:icon="@drawable/ic_menu_game"
                 android:title="@string/menu_game" />
         <item
-                android:id="@+id/nav_home"
+                android:id="@+id/nav_filter"
                 android:icon="@drawable/ic_menu_camera"
                 android:title="@string/menu_filter" />
     </group>

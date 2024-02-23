@@ -2,6 +2,7 @@ package com.example.dailyraily
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var navView: NavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,14 +39,19 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
+        navView = binding.navView
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         navController = navHostFragment.navController
+
+        updateNavigationMenu(3)
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_todo, R.id.nav_game
+                R.id.nav_todo, R.id.nav_game, R.id.nav_filter
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -68,12 +76,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun updateNavigationMenu(itemCount: Int) {
+        val navMenu = navView.menu
+        navMenu.clear()
+
+        for (i in 0 until itemCount) {
+            val itemId = View.generateViewId()
+            navMenu.add(R.id.drawer_menu, itemId, Menu.NONE, generateItemTitle(i))
+                .setIcon(setFilterIcon(i))
+                .setCheckable(true)
+        }
+    }
+
+    private fun generateItemTitle(index: Int): String {
+        return "Item " + (index + 1)
+    }
+
+    private fun setFilterIcon(index: Int): Int {
+        val basePath = "ic_menu_filter"
+        val suffix = "$basePath$index"
+        return resources.getIdentifier(suffix, "drawable", packageName)
     }
 }
