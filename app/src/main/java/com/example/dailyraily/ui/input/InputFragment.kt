@@ -1,4 +1,4 @@
-package com.example.dailyraily.ui.Input
+package com.example.dailyraily.ui.input
 
 import android.os.Bundle
 import android.view.LayoutInflater
