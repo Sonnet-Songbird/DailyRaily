@@ -11,9 +11,13 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.dailyraily.MainActivity
+import com.example.dailyraily.R
 import com.example.dailyraily.data.model.ResetType
+import com.example.dailyraily.data.model.Todo
 import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.databinding.FragmentInputBinding
 import java.time.DayOfWeek
@@ -23,6 +27,7 @@ class InputFragment : Fragment() {
 
     private var _binding: FragmentInputBinding? = null
     private lateinit var viewModel: InputViewModel
+    private lateinit var navController: NavController
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,6 +36,12 @@ class InputFragment : Fragment() {
     ): View? {
         _binding = FragmentInputBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        navController =
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,19 +56,17 @@ class InputFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity?)!!.hideFab()
-        if (!checkGame()) {
-            return
-        }
+
         if (updateByArgument()) {
             return
         }
     }
 
     private fun checkGame(): Boolean {
-//        if (TodoListManager.getAllGame().isEmpty()) {
-//        exceptionReturn("먼저 게임을 등록 해 주세요.")
-//            return false
-//        }
+        if (TodoListManager.getAllGame().isEmpty()) {
+            exceptionReturn("먼저 게임을 등록 해 주세요.")
+            return false
+        }
         return true
     }
 
@@ -65,7 +74,9 @@ class InputFragment : Fragment() {
         val selectedTab = arguments?.getString("selectedTab")
         val itemId = arguments?.getString("itemId")
         val isEdit: Boolean = !(itemId.isNullOrBlank())
-        Log.d("test", "$selectedTab")
+        if (selectedTab != "Game" && !checkGame()) {
+            return true
+        }
         when (selectedTab) {
             "Todo", "Filter" -> {
                 binding.TodoInputContainer.visibility = View.VISIBLE
@@ -140,6 +151,8 @@ class InputFragment : Fragment() {
             val itemId = arguments?.getString("itemId")
             val isEdit: Boolean = !(itemId.isNullOrBlank())
             val context: Context = requireContext()
+            val toast = Toast.makeText(requireContext(), "이름은 비어 있을 수 없습니다.", Toast.LENGTH_SHORT)
+
             when (arguments?.getString("selectedTab")) {
                 "Todo", "Filter" -> {
                     val selectedGame = binding.spinnerGame.selectedItem.toString()
@@ -147,6 +160,12 @@ class InputFragment : Fragment() {
                     val selectedResetType = binding.spinnerResetType.selectedItem.toString()
                     val enteredGoal = binding.editTextGoal.text.toString()
                     val isImportant = binding.checkBoxImportant.isChecked.toString()
+
+                    if (enteredName.isBlank()) {
+                        toast.show()
+                        return@setOnClickListener
+                    }
+
                     viewModel.register(
                         isEdit, context,
                         TodoInputDTO(
@@ -158,16 +177,19 @@ class InputFragment : Fragment() {
                             itemId ?: ""
                         )
                     )
+                    navController.navigate(R.id.nav_todo)
                 }
 
                 "Game" -> {
                     val enteredName = binding.editTextTodoName.text.toString()
                     val selectedDayOfWeek = binding.spinnerDayOfWeek.selectedItem.toString()
-                    Log.d("test", "InputF: ${selectedDayOfWeek}")
                     val enteredTime = binding.editTextTime.text.toString()
                     val enteredDate = binding.editTextDateOfMonth.text.toString()
 
-
+                    if (enteredName.isBlank()) {
+                        toast.show()
+                        return@setOnClickListener
+                    }
                     viewModel.register(
                         isEdit, context,
                         GameInputDTO(
@@ -177,6 +199,7 @@ class InputFragment : Fragment() {
                             enteredDate
                         )
                     )
+                    navController.navigate(R.id.nav_game)
                 }
 
 
