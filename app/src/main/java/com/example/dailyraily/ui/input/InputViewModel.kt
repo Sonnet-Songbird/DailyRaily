@@ -39,7 +39,7 @@ class InputViewModel : ViewModel() {
             context, TodoCreateDTO(
                 dto.selectedGame,
                 dto.enteredName,
-                dto.enteredGoal.toInt(),
+                dto.enteredGoal.toIntOrNull() ?: 1,
                 ResetType.valueOf(dto.selectedResetType),
                 dto.isImportant.toBoolean()
             )
@@ -54,9 +54,9 @@ class InputViewModel : ViewModel() {
             context,
             GameCreateDTO(
                 dto.enteredName,
-                dto.enteredDate.toInt(),
+                dto.enteredDate.toIntOrNull() ?: 1,
                 DayOfWeek.valueOf(dto.selectedDayOfWeek),
-                dto.enteredTime.toInt()
+                dto.enteredTime.toIntOrNull() ?: 0
             )
         )
         Log.d("test", "INP View: ${dto.selectedDayOfWeek}")

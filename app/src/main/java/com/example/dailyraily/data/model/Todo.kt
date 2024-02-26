@@ -104,7 +104,8 @@ class Todo(
         fun create(context: Context, dto: TodoCreateDTO) {
             val dao = TodoDAO(context)
             val game = TodoListManager.getGame(dto.gameName)
-            dao.insertTodo(Todo(game, dto.name, dto.goal, dto.resetType, dto.important))
+            val goal = if (dto.goal == 0) 1 else dto.goal
+            dao.insertTodo(Todo(game, dto.name, goal, dto.resetType, dto.important))
         }
     }
 

@@ -100,8 +100,8 @@ class Game(
     companion object {
         fun create(context: Context, dto: GameCreateDTO) {
             val dao = GameDAO(context)
-            dao.insertGame(Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour))
-            Log.d("test", "GameDomain ${dto.resetDOW}")
+            val resetDay = if (dto.resetDay == 0) 1 else dto.resetDay
+            dao.insertGame(Game(dto.name, resetDay, dto.resetDOW, dto.resetHour))
         }
     }
 

@@ -91,9 +91,9 @@ enum class ResetType {
                 0
             } else {
                 if (todo.important)
-                    101
+                    105
                 else {
-                    100
+                    104
                 }
             }
         }
