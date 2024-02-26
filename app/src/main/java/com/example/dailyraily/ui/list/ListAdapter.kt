@@ -20,7 +20,18 @@ import java.time.DayOfWeek
 class ListAdapter(private val data: List<Listable>, val context: Context) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     private val alertDialog: ItemDeleteAlertDialog = ItemDeleteAlertDialog(context)
+    private val handler: Handler = Handler(Looper.getMainLooper())
 
+    init {
+        handler.postDelayed({
+            notifyDataSetChanged()
+            handler.postDelayed(this::updateDataPeriodically, 1000)
+        }, 1000)
+    }
+    private fun updateDataPeriodically() {
+        notifyDataSetChanged()
+        handler.postDelayed(this::updateDataPeriodically, 1000)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutRes = R.layout.item_layout
         val view = LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
