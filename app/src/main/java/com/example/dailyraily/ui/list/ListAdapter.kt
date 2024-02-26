@@ -3,9 +3,12 @@ package com.example.dailyraily.ui.list
 
 import TodoRemoveDTO
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -13,15 +16,10 @@ import com.example.dailyraily.R
 import com.example.dailyraily.data.dto.GameRemoveDTO
 import com.example.dailyraily.data.service.TodoListManager
 import java.time.DayOfWeek
-import java.util.UUID
 
 class ListAdapter(private val data: List<Listable>, val context: Context) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
-    val alertDialog: com.example.dailyraily.ui.list.AlertDialog
-
-    init {
-        alertDialog = AlertDialog(context)
-    }
+    private val alertDialog: ItemDeleteAlertDialog = ItemDeleteAlertDialog(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutRes = R.layout.item_layout
@@ -39,13 +37,34 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
         private val textView1: TextView = itemView.findViewById(R.id.textView1)
         private val textView2: TextView = itemView.findViewById(R.id.textView2)
         private val textView3: TextView = itemView.findViewById(R.id.textView3)
+        private val stroke: View = itemView.findViewById(R.id.strokeLine)
+        private val chkbox: CheckBox = itemView.findViewById(R.id.checkBox)
+        private val countTextView: TextView = itemView.findViewById(R.id.countTextView)
+
 
         fun bind(item: Listable) {
             val dto = item.toListItem()
             textView1.text = dto.columnOne
             textView2.text = dto.columnTwo
             textView3.text = dto.columnThree
-
+            if (dto.type == ItemDTO.ItemType.TODO) {
+                val count: Int = dto.variable.split("|")[0].toInt()
+                val goal: Int = dto.variable.split("|")[1].toInt()
+                if (goal == 1) {
+                    chkbox.visibility = View.VISIBLE
+                    countTextView.visibility = View.GONE
+                    chkbox.isChecked = (count == goal)
+                } else {
+                    countTextView.visibility = View.VISIBLE
+                    chkbox.visibility = View.GONE
+                    countTextView.text = "[$count/$goal]"
+                }
+            }
+            if (dto.isDone) {
+                stroke.visibility = View.VISIBLE
+            } else {
+                stroke.visibility = View.GONE
+            }
         }
 
         init {
@@ -163,6 +182,8 @@ data class ItemDTO(
     val columnThree: String,
     val id: String,
     val type: ItemType,
+    var isDone: Boolean = false,
+    val variable: String = "",
     var isSelected: Boolean = false
 ) {
     enum class ItemType {
@@ -191,7 +212,7 @@ inline fun View.setOnDoubleClickListener(crossinline onDoubleClick: () -> Unit) 
 
 const val DOUBLE_CLICK_TIME_DELTA: Long = 300 // 더블클릭 간격
 
-class AlertDialog(val context: Context) {
+class ItemDeleteAlertDialog(val context: Context) {
 
     fun showConfirmationDialog(
         title: String,
