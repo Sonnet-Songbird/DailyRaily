@@ -112,7 +112,6 @@ class Todo(
     fun remove(context: Context) {
         val dao = TodoDAO(context)
         game.deregister(uuid)
-
         dao.deleteTodo(uuid)
     }
 

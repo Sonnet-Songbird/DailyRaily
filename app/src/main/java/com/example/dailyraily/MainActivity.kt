@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -75,7 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (System.currentTimeMillis() - backPressedTime <= 2000) {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawers()
+            } else if (System.currentTimeMillis() - backPressedTime <= 2000) {
                 finish()
             } else {
                 backPressedTime = System.currentTimeMillis()
@@ -126,11 +129,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNavigationItemClick(menuItem: MenuItem) {
+        binding.drawerLayout.closeDrawers()
         when (menuItem.itemId) {
             R.id.nav_todo, R.id.nav_game -> {
                 navController.navigate(menuItem.itemId)
             }
-
             else -> {
                 val itemId = menuItem.itemId
                 val index = itemId - R.id.drawer_menu

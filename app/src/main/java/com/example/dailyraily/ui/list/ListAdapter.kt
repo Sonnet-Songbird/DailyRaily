@@ -5,6 +5,7 @@ import TodoRemoveDTO
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import com.example.dailyraily.data.dto.GameRemoveDTO
 import com.example.dailyraily.data.service.TodoListManager
 import java.time.DayOfWeek
 
-class ListAdapter(private val data: List<Listable>, val context: Context) :
+class ListAdapter(private var data: List<Listable>, val context: Context) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     private val alertDialog: ItemDeleteAlertDialog = ItemDeleteAlertDialog(context)
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -28,10 +29,11 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
             handler.postDelayed(this::updateDataPeriodically, 1000)
         }, 1000)
     }
+
     private fun updateDataPeriodically() {
-        notifyDataSetChanged()
         handler.postDelayed(this::updateDataPeriodically, 1000)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutRes = R.layout.item_layout
         val view = LayoutInflater.from(parent.context).inflate(layoutRes, parent, false)
@@ -86,12 +88,10 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
 
             itemView.setOnClickListener {
                 val item = data[adapterPosition]
-
                 val clickTime = System.currentTimeMillis()
 
                 if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
                     val id = item.getId().split("|")
-                    TodoListManager.discountTodo(alertDialog.context, id[0], id[1])
                     when (item.toListItem().type) {
                         ItemDTO.ItemType.GAME -> {
                             alertDialog.showConfirmationDialog(
@@ -103,8 +103,9 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
                                     TodoListManager.removeGame(
                                         alertDialog.context,
                                         GameRemoveDTO(item.getId())
-
                                     )
+                                    removeItem(adapterPosition)
+
                                 },
                                 {
 
@@ -113,6 +114,7 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
                         }
 
                         ItemDTO.ItemType.TODO -> {
+                            TodoListManager.discountTodo(alertDialog.context, id[0], id[1])
                             alertDialog.showConfirmationDialog(
                                 "삭제",
                                 "이 할일을 삭제하시겠습니까?",
@@ -124,6 +126,9 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
                                         alertDialog.context,
                                         TodoRemoveDTO(id[0], id[1])
                                     )
+                                    removeItem(adapterPosition)
+
+
                                 },
                                 {
 
@@ -140,14 +145,16 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
 
                         ItemDTO.ItemType.TODO -> {
                             val id = item.getId().split("|")
+                            Log.d("test","touch")
                             TodoListManager.countTodo(alertDialog.context, id[0], id[1])
+                            notifyItemChanged(adapterPosition)
                         }
                     }
                 }
 
-                notifyDataSetChanged()
                 lastClickTime = clickTime
             }
+
 
             //네비게이션바 등록 / 초기화
             itemView.setOnLongClickListener {
@@ -167,6 +174,11 @@ class ListAdapter(private val data: List<Listable>, val context: Context) :
                 true
             }
         }
+    }
+
+    private fun removeItem(position: Int) {
+        data = data.filterIndexed { index, _ -> index != position }
+        notifyItemRemoved(position)
     }
 }
 

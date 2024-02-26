@@ -43,7 +43,7 @@ enum class ResetType {
         override fun getNextResetDateTime(todo: Todo): LocalDateTime? {
             val today = todo.game.adjustedDate
             val dateDifference = (todo.game.resetDOW.value - today.dayOfWeek.value + 7) % 7
-            val nextResetDate = today.plusDays(dateDifference.toLong())
+            val nextResetDate = today.plusDays((dateDifference + 7).toLong())
             return nextResetDate.atTime(todo.game.resetHour, 0)
         }
 

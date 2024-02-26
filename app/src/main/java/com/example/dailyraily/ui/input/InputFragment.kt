@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -151,7 +152,7 @@ class InputFragment : Fragment() {
             val itemId = arguments?.getString("itemId")
             val isEdit: Boolean = !(itemId.isNullOrBlank())
             val context: Context = requireContext()
-            val toast = Toast.makeText(requireContext(), "이름은 비어 있을 수 없습니다.", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(requireContext(), "", Toast.LENGTH_SHORT)
 
             when (arguments?.getString("selectedTab")) {
                 "Todo", "Filter" -> {
@@ -160,8 +161,14 @@ class InputFragment : Fragment() {
                     val selectedResetType = binding.spinnerResetType.selectedItem.toString()
                     val enteredGoal = binding.editTextGoal.text.toString()
                     val isImportant = binding.checkBoxImportant.isChecked.toString()
+                    if ((enteredGoal.toIntOrNull() ?: 1) !in 1..99) {
+                        toast.setText("횟수는 1에서 99 사이여야 합니다.. ")
+                        toast.show()
+                        return@setOnClickListener
+                    }
 
                     if (enteredName.isBlank()) {
+                        toast.setText("이름은 비어 있을 수 없습니다.")
                         toast.show()
                         return@setOnClickListener
                     }
@@ -186,7 +193,20 @@ class InputFragment : Fragment() {
                     val enteredTime = binding.editTextTime.text.toString()
                     val enteredDate = binding.editTextDateOfMonth.text.toString()
 
+
+
+                    if ((enteredTime.toIntOrNull() ?: 0) !in 0..23) {
+                        toast.setText("시간은 0에서 23 사이여야 합니다.. ")
+                        toast.show()
+                        return@setOnClickListener
+                    }
+                    if ((enteredDate.toIntOrNull() ?: 1) !in 1..28) {
+                        toast.setText("날짜는 0에서 28 사이여야 합니다.. ")
+                        toast.show()
+                        return@setOnClickListener
+                    }
                     if (enteredName.isBlank()) {
+                        toast.setText("이름은 비어 있을 수 없습니다.")
                         toast.show()
                         return@setOnClickListener
                     }

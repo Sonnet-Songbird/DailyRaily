@@ -114,7 +114,10 @@ class Game(
 
     fun remove(context: Context) {
         val dao = GameDAO(context)
-        _todoList.values.forEach { it.remove(context) }
+        val removeList: List<Todo> = _todoList.values.toList()
+        removeList.forEach { it.remove(context) }
+
+
         TodoListManager.deregisterGame(this.name)
         dao.deleteGame(name)
     }
