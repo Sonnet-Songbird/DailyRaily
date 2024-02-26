@@ -28,8 +28,11 @@ class Todo(
         get() = goal <= count
 
 
-    val leftTime: Duration?
-        get() = resetType.getNextResetDateTime(this).let { Duration.between(now(), (it)) }
+    private val leftTime: Duration
+        get() {
+            val nextResetDateTime = resetType.getNextResetDateTime(this)
+            return nextResetDateTime?.let { Duration.between(now(), it) } ?: Duration.ZERO
+        }
 
 
     val priority: Int
@@ -78,13 +81,17 @@ class Todo(
 
     //TODO 이벤트 리스너 문제 해결되면 삭제
     fun discount(context: Context) {
-        count--
-        updateDB(context)
+        if (count != 0) {
+            count--
+            updateDB(context)
+        }
     }
 
     fun count(context: Context) {
-        count++
-        updateDB(context)
+        if (!done) {
+            count++
+            updateDB(context)
+        }
     }
 
 
@@ -116,11 +123,18 @@ class Todo(
 
     override fun toListItem(): ItemDTO {
         val timeString = leftTimeString()
+        val columnTwo: String
+        if (resetType != ResetType.NORMAL) {
+            columnTwo = timeString
+        } else columnTwo = "초기화 없음"
         return ItemDTO(
-            "$name [ $count / $goal ] ",
-            timeString,
+            "$name [${resetType.korName()}]",
+            columnTwo,
             game.name,
-            uuid.toString(), ItemDTO.ItemType.TODO
+            uuid.toString(),
+            ItemDTO.ItemType.TODO,
+            this.done,
+            "$count|$goal"
         )
     }
 
