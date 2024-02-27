@@ -80,11 +80,19 @@ object TodoListManager {
     }
 
     fun countTodo(context: Context, game: String, uuid: String) {
-        getTodo(getGame(game), UUID.fromString(uuid)).count(context)
+        try {
+            getTodo(getGame(game), UUID.fromString(uuid)).count(context)
+
+        } catch (e: IllegalArgumentException) {
+            return
+            Log.d("test", "countTodo Todo파싱 오류 무시됨 ${uuid}")
+        }
     }
+
     fun discountTodo(context: Context, game: String, uuid: String) {
         getTodo(getGame(game), UUID.fromString(uuid)).discount(context)
     }
+
     fun resetTodo(context: Context, game: String, uuid: String) {
         getTodo(getGame(game), UUID.fromString(uuid)).reset(context)
     }
