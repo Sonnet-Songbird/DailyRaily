@@ -104,7 +104,7 @@ class ListAdapter(private var data: List<Listable>, val context: Context) :
                                         alertDialog.context,
                                         GameRemoveDTO(item.getId())
                                     )
-                                    removeItem(adapterPosition)
+                                    removeItem(item.getId(), adapterPosition)
 
                                 },
                                 {
@@ -126,7 +126,7 @@ class ListAdapter(private var data: List<Listable>, val context: Context) :
                                         alertDialog.context,
                                         TodoRemoveDTO(id[0], id[1])
                                     )
-                                    removeItem(adapterPosition)
+                                    removeItem(item.getId(), adapterPosition)
 
 
                                 },
@@ -145,7 +145,7 @@ class ListAdapter(private var data: List<Listable>, val context: Context) :
 
                         ItemDTO.ItemType.TODO -> {
                             val id = item.getId().split("|")
-                            Log.d("test","touch")
+                            Log.d("test", "touch")
                             TodoListManager.countTodo(alertDialog.context, id[0], id[1])
                             notifyItemChanged(adapterPosition)
                         }
@@ -176,9 +176,9 @@ class ListAdapter(private var data: List<Listable>, val context: Context) :
         }
     }
 
-    private fun removeItem(position: Int) {
-        data = data.filterIndexed { index, _ -> index != position }
-        notifyItemRemoved(position)
+    private fun removeItem(id: String, index: Int) {
+        data = data.filterIndexed { _, item -> item.getId() != id }
+        notifyItemRemoved(index)
     }
 }
 
