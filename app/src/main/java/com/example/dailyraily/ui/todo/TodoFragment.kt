@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.dailyraily.databinding.FragmentTodoBinding
-import com.example.dailyraily.ui.list.ListAdapter
 
 class TodoFragment : Fragment() {
+
     private var _binding: FragmentTodoBinding? = null
-
-    private lateinit var viewModel: TodoViewModel
-    private lateinit var recyclerView: RecyclerView
-
+    private val todoViewModel by lazy {
+        ViewModelProvider(this)[TodoViewModel::class.java]
+    }
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -27,28 +25,16 @@ class TodoFragment : Fragment() {
         _binding = FragmentTodoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val recyclerView = binding.frameList.recyclerView
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+
+        // RecyclerView 어댑터 초기화
+//        val adapter = todoViewModel.listAdapter
+//        recyclerView.adapter = adapter
+
         return root
     }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = binding.frameList.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
-
-        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
-        recyclerView.visibility = View.VISIBLE
-    }
-    override fun onResume() {
-        super.onResume()
-        viewModel.updateData()
-        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
-        recyclerView.visibility = View.VISIBLE
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

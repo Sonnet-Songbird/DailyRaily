@@ -2,7 +2,6 @@ package com.example.dailyraily.data.model
 
 import TodoListWithPriority
 import android.content.Context
-import android.util.Log
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.dto.GameUpdateDTO
 import com.example.dailyraily.data.repository.GameDAO
@@ -18,27 +17,20 @@ import java.util.UUID
 class Game(
     val name: String,
     var resetDay: Int,
-    var resetDOW: DayOfWeek = DayOfWeek.MONDAY,
+    var resetDOW: DayOfWeek,
     var resetHour: Int,
 ) : Listable {
     init {
         TodoListManager.registerGame(this)
     }
 
-    private val _todoList: HashMap<UUID, Todo> = HashMap()
-    val todoList: List<Todo>
-        get() = getAllTodo()
-    val sortedTodoList: List<Todo>
-        get() = TodoListWithPriority.make(todoList).sortedTodoList
-
+    private val todoList: HashMap<UUID, Todo> = HashMap()
     override fun toListItem(): ItemDTO {
-        val sortedTodoList = TodoListWithPriority.make(_todoList.values.toList()).sortedTodoList
-        val thirdColumn =
-            sortedTodoList.getOrNull(0)?.let { "${it.name} ${it.leftTimeString()}" } ?: ""
-
+        val todo = TodoListWithPriority.make(todoList.values.toList()).sortedTodoList[0]
+        val thirdColumn = todo.let { "${it.name} ${it.leftTimeString()}" }
 
         return ItemDTO(
-            "${name} [${countDoneTodo}/${countTodo}]",
+            "${name} [${countDoneTodo}/{$countTodo}]",
             "${resetHour}시 / ${dowToString(resetDOW)} / ${resetDay}일",
             thirdColumn,
             name,
@@ -46,34 +38,18 @@ class Game(
         )
     }
 
-    override fun getId(): String {
-        return name
-    }
-
     fun getTodo(uuid: UUID): Todo? {
-        return _todoList[uuid]
-    }
-
-    fun getTodoPrioritySum(int: Int): Int {
-        var result = 0
-        for (i in 0 until minOf(sortedTodoList.size, 3)) {
-            result += sortedTodoList[i].priority
-        }
-        return result
-    }
-
-    fun getAllTodo(): List<Todo> {
-        return _todoList.values.toList()
+        return todoList[uuid]
     }
 
     val countTodo: Int
         get() {
-            return _todoList.size
+            return todoList.size
         }
 
     val countDoneTodo: Int
         get() {
-            return _todoList.values.count { it.done }
+            return todoList.values.count { it.done }
         }
 
 
@@ -90,18 +66,17 @@ class Game(
 
 
     fun register(todo: Todo) {
-        this._todoList[todo.uuid] = todo
+        this.todoList[todo.uuid] = todo
     }
 
     fun deregister(uuid: UUID) {
-        _todoList.remove(uuid)
+        todoList.remove(uuid)
     }
 
     companion object {
         fun create(context: Context, dto: GameCreateDTO) {
             val dao = GameDAO(context)
-            val resetDay = if (dto.resetDay == 0) 1 else dto.resetDay
-            dao.insertGame(Game(dto.name, resetDay, dto.resetDOW, dto.resetHour))
+            dao.insertGame(Game(dto.name, dto.resetDay, dto.resetDOW, dto.resetHour))
         }
     }
 
@@ -114,10 +89,7 @@ class Game(
 
     fun remove(context: Context) {
         val dao = GameDAO(context)
-        val removeList: List<Todo> = _todoList.values.toList()
-        removeList.forEach { it.remove(context) }
-
-
+        todoList.values.forEach { it.remove(context) }
         TodoListManager.deregisterGame(this.name)
         dao.deleteGame(name)
     }
@@ -126,10 +98,6 @@ class Game(
     private fun updateDB(context: Context) {
         val dao = GameDAO(context)
         dao.updateGame(this)
-    }
-
-    override fun toString(): String {
-        return name
     }
 
 

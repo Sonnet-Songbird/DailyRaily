@@ -1,10 +1,10 @@
-<!--suppress NavigationFile -->
-<!-- filter name has IDE bug -->
+<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/mobile_navigation"
         app:startDestination="@+id/nav_todo">
+
 
     <fragment
             android:id="@+id/nav_todo"
@@ -17,34 +17,10 @@
             android:name="com.example.dailyraily.ui.game.GameFragment"
             android:label="@string/menu_game"
             tools:layout="@layout/fragment_game" />
-
     <fragment
             android:id="@+id/nav_filter"
             android:name="com.example.dailyraily.ui.filter.FilterFragment"
             android:label="@string/menu_filter"
-            tools:layout="@layout/fragment_filter">
-        <argument
-                android:name="filterGame"
-                android:id="@+id/filterGame"
-                app:argType="string" />
-    </fragment>
+            tools:layout="@layout/fragment_filter" />
 
-    <fragment
-            android:id="@+id/nav_input"
-            android:name="com.example.dailyraily.ui.input.InputFragment"
-            tools:layout="@layout/fragment_input">
-        <argument
-                android:name="selectedTab"
-                android:id="@+id/selectedTab"
-                app:argType="string" />
-        <argument
-                android:name="itemId"
-                android:id="@+id/itemId"
-                app:argType="string" />
-        <argument
-                android:name="defaultGame"
-                android:id="@+id/defaultGame"
-                app:argType="string" />
-
-    </fragment>
 </navigation>

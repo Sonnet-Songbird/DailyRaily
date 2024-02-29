@@ -4,111 +4,107 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+    <!-- 입력 상자 컨테이너 -->
     <LinearLayout
-            android:id="@+id/InputFormContainer"
+            android:id="@+id/inputContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        <LinearLayout
-                android:id="@+id/TodoInputContainer"
+        <!-- 게임 선택 상자 -->
+        <Spinner
+                android:id="@+id/spinnerGame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_marginBottom="16dp"
+                android:entries="@array/game_options"
+                android:prompt="@string/choose_game" />
 
-            <!-- 게임 선택 상자 -->
-            <Spinner
-                    android:id="@+id/spinnerGame"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:entries="@array/game_options"
-                    android:prompt="@string/choose_game" />
-
-            <!-- 이름 입력 텍스트 상자 -->
-            <EditText
-                    android:id="@+id/editTextGameName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:hint="@string/enter_name"
-                    android:importantForAutofill="no"
-                    android:inputType="text" />
-
-            <!-- 리셋 타입 선택 상자 -->
-            <Spinner
-                    android:id="@+id/spinnerResetType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:entries="@array/reset_type"
-                    android:prompt="@string/choose_reset_type" />
-
-            <!-- 목표 입력 숫자 -->
-            <EditText
-                    android:id="@+id/editTextGoal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:inputType="number"
-                    android:hint="@string/enter_goal"
-                    android:importantForAutofill="no" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/GameInputContainer"
+        <!-- 이름 입력 텍스트 상자 -->
+        <EditText
+                android:id="@+id/editTextGameName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginBottom="16dp"
+                android:hint="@string/enter_name"
+                android:importantForAutofill="no"
+                android:inputType="text" />
 
-            <!-- 이름 입력 텍스트 상자 -->
-            <EditText
-                    android:id="@+id/editTextTodoName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:hint="@string/enter_name"
-                    android:importantForAutofill="no"
-                    android:inputType="text" />
+        <!-- 리셋 타입 선택 상자 -->
+        <Spinner
+                android:id="@+id/spinnerResetType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/reset_type"
+                android:prompt="@string/choose_reset_type" />
 
-            <!-- 요일 선택 상자 -->
-            <Spinner
-                    android:id="@+id/spinnerDayOfWeek"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:entries="@array/day_of_week_options"
-                    android:prompt="@string/choose_day_of_week" />
+        <!-- 목표 입력 숫자 -->
+        <EditText
+                android:id="@+id/editTextGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:inputType="number"
+                android:hint="@string/enter_goal"
+                android:importantForAutofill="no" />
+    </LinearLayout>
 
-            <!-- 시간 입력 숫자 -->
-            <EditText
-                    android:id="@+id/editTextTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:inputType="number"
-                    android:hint="@string/enter_time"
-                    android:importantForAutofill="no" />
+    <!-- 이름(텍스트), 요일(셀렉트박스), 시간, 날짜 입력 상자 -->
+    <LinearLayout
+            android:id="@+id/extendedInputContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inputContainer"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <!-- 날짜 입력 숫자 -->
-            <EditText
-                    android:id="@+id/editTextDateOfMonth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:inputType="number"
-                    android:hint="@string/enter_date"
-                    android:importantForAutofill="no"
-                    tools:ignore="TextFields" />
-        </LinearLayout>
+        <!-- 이름 입력 텍스트 상자 -->
+        <EditText
+                android:id="@+id/editTextTodoName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/enter_name"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+        <!-- 요일 선택 상자 -->
+        <Spinner
+                android:id="@+id/spinnerDayOfWeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/day_of_week_options"
+                android:prompt="@string/choose_day_of_week" />
+
+        <!-- 시간 입력 숫자 -->
+        <EditText
+                android:id="@+id/editTextTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:inputType="number"
+                android:hint="@string/enter_time"
+                android:importantForAutofill="no" />
+
+        <!-- 날짜 입력 숫자 -->
+        <EditText
+                android:id="@+id/editTextDateOfMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:inputType="number"
+                android:hint="@string/enter_date"
+                android:importantForAutofill="no"
+                tools:ignore="TextFields" />
     </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/InputFormContainer"
+            android:layout_below="@id/extendedInputContainer"
             android:orientation="horizontal">
 
         <CheckBox

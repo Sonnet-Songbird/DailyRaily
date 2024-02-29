@@ -1,12 +1,9 @@
 package com.example.dailyraily.data.service
 
 import TodoCreateDTO
-import TodoListWithPriority
 import TodoRemoveDTO
 import TodoUpdateDTO
 import android.content.Context
-import android.system.Os.remove
-import android.util.Log
 import com.example.dailyraily.data.dto.GameCreateDTO
 import com.example.dailyraily.data.dto.GameRemoveDTO
 import com.example.dailyraily.data.dto.GameUpdateDTO
@@ -65,52 +62,13 @@ object TodoListManager {
         getTodo(getGame(dto.gameName), dto.uuid).update(context, dto)
     }
 
+    fun resetTodo(context: Context, todo: Todo) {
+        todo.reset(context)
+    }
+
     fun removeTodo(context: Context, dto: TodoRemoveDTO) {
-        val todo = getTodo(getGame(dto.gameName), UUID.fromString(dto.uuid))
-        todo.remove(context)
+        getTodo(getGame(dto.gameName), dto.uuid).remove(context)
     }
 
 
-    fun getMostPriorityTodo(): Todo {
-        return getAllTodosWithPriority()[0]
-    }
-
-    fun getAllTodosWithPriority(): List<Todo> {
-        return TodoListWithPriority.make(getAllTodos()).sortedTodoList
-    }
-
-    fun countTodo(context: Context, game: String, uuid: String) {
-        try {
-            getTodo(getGame(game), UUID.fromString(uuid)).count(context)
-
-        } catch (e: IllegalArgumentException) {
-            Log.d("test", "countTodo Todo파싱 오류 무시됨 ${uuid}")
-            return
-        }
-    }
-    fun discountTodo(context: Context, game: String, uuid: String) {
-        getTodo(getGame(game), UUID.fromString(uuid)).discount(context)
-    }
-    fun resetTodo(context: Context, game: String, uuid: String) {
-        getTodo(getGame(game), UUID.fromString(uuid)).reset(context)
-    }
-
-    private fun getAllTodos(): List<Todo> {
-        val todos = ArrayList<Todo>()
-        for (game in getAllGame()) {
-            for (todo in game.todoList) {
-                todos.add(todo)
-            }
-        }
-        return todos.toList()
-    }
-
-    fun getMostPriorityGame(pickedGameAmount: Int, checkedTodoAmount: Int): List<Game> {
-        return getAllGame().sortedByDescending { it.getTodoPrioritySum(checkedTodoAmount) }
-            .take(pickedGameAmount)
-    }
-
-    fun getTodos(gameName: String): List<Todo> {
-        return getGame(gameName).todoList
-    }
 }

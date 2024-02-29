@@ -12,7 +12,7 @@ enum class ResetType {
         override fun getNextResetDateTime(todo: Todo): LocalDateTime? {
             val todayReset = LocalDateTime.now().withHour(todo.game.resetHour).withMinute(0)
             return if (LocalDateTime.now().isAfter(todayReset)) {
-                cycle(todayReset, 1)
+                todayReset.plusDays(1)
             } else {
                 todayReset
             }
@@ -23,15 +23,11 @@ enum class ResetType {
                 0
             } else {
                 if (todo.important)
-                    103
+                    101
                 else {
-                    102
+                    100
                 }
             }
-        }
-
-        override fun korName(): String {
-            return "일일"
         }
 
     },
@@ -43,7 +39,7 @@ enum class ResetType {
         override fun getNextResetDateTime(todo: Todo): LocalDateTime? {
             val today = todo.game.adjustedDate
             val dateDifference = (todo.game.resetDOW.value - today.dayOfWeek.value + 7) % 7
-            val nextResetDate = today.plusDays((dateDifference + 7).toLong())
+            val nextResetDate = today.plusDays(dateDifference.toLong())
             return nextResetDate.atTime(todo.game.resetHour, 0)
         }
 
@@ -53,15 +49,11 @@ enum class ResetType {
                 0
             } else {
                 if (todo.important)
-                    102
-                else {
                     101
+                else {
+                    100
                 }
             }
-        }
-
-        override fun korName(): String {
-            return "주간"
         }
 
     },
@@ -82,18 +74,14 @@ enum class ResetType {
             }
         }
 
-        override fun korName(): String {
-            return "월간"
-        }
-
         override fun getPriority(todo: Todo): Int {
             return if (todo.done) {
                 0
             } else {
                 if (todo.important)
-                    105
+                    101
                 else {
-                    104
+                    100
                 }
             }
         }
@@ -106,10 +94,6 @@ enum class ResetType {
 
         override fun getNextResetDateTime(todo: Todo): LocalDateTime? {
             return null
-        }
-
-        override fun korName(): String {
-            return "수동"
         }
 
         override fun getPriority(todo: Todo): Int {
@@ -139,7 +123,6 @@ enum class ResetType {
     abstract fun cycle(localDateTime: LocalDateTime, long: Long): LocalDateTime
 
     abstract fun getPriority(todo: Todo): Int
-    abstract fun korName(): String
 
     companion object {
         fun of(name: String): ResetType {

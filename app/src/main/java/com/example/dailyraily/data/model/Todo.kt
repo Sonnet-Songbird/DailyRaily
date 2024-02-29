@@ -3,7 +3,6 @@ package com.example.dailyraily.data.model
 import TodoCreateDTO
 import TodoUpdateDTO
 import android.content.Context
-import android.util.Log
 import com.example.dailyraily.data.repository.TodoDAO
 import com.example.dailyraily.data.service.TodoListManager
 import com.example.dailyraily.ui.list.ItemDTO
@@ -28,11 +27,8 @@ class Todo(
         get() = goal <= count
 
 
-    private val leftTime: Duration
-        get() {
-            val nextResetDateTime = resetType.getNextResetDateTime(this)
-            return nextResetDateTime?.let { Duration.between(now(), it) } ?: Duration.ZERO
-        }
+    val leftTime: Duration?
+        get() = resetType.getNextResetDateTime(this).let { Duration.between(now(), (it)) }
 
 
     val priority: Int
@@ -76,24 +72,9 @@ class Todo(
     fun reset(context: Context) {
         count = 0
         recentResetDate = game.adjustedDate
+
         updateDB(context)
     }
-
-    //TODO 이벤트 리스너 문제 해결되면 삭제
-    fun discount(context: Context) {
-        if (count != 0) {
-            count--
-            updateDB(context)
-        }
-    }
-
-    fun count(context: Context) {
-        if (!done) {
-            count++
-            updateDB(context)
-        }
-    }
-
 
     companion object {
         /** Loads only if the game to be connected is already loaded. */
@@ -104,14 +85,14 @@ class Todo(
         fun create(context: Context, dto: TodoCreateDTO) {
             val dao = TodoDAO(context)
             val game = TodoListManager.getGame(dto.gameName)
-            val goal = if (dto.goal == 0) 1 else dto.goal
-            dao.insertTodo(Todo(game, dto.name, goal, dto.resetType, dto.important))
+            dao.insertTodo(Todo(game, dto.name, dto.goal, dto.resetType, dto.important))
         }
     }
 
     fun remove(context: Context) {
         val dao = TodoDAO(context)
         game.deregister(uuid)
+
         dao.deleteTodo(uuid)
     }
 
@@ -123,23 +104,12 @@ class Todo(
 
     override fun toListItem(): ItemDTO {
         val timeString = leftTimeString()
-        val columnTwo: String
-        if (resetType != ResetType.NORMAL) {
-            columnTwo = timeString
-        } else columnTwo = "초기화 없음"
         return ItemDTO(
-            "$name [${resetType.korName()}]",
-            columnTwo,
+            "$name [ $count / $goal ] ",
+            timeString,
             game.name,
-            uuid.toString(),
-            ItemDTO.ItemType.TODO,
-            this.done,
-            "$count|$goal"
+            uuid.toString(), ItemDTO.ItemType.TODO
         )
-    }
-
-    override fun getId(): String {
-        return "${game.name}|${uuid}"
     }
 
     fun leftTimeString(): String {

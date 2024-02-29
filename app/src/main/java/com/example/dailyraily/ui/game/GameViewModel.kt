@@ -1,14 +1,13 @@
 package com.example.dailyraily.ui.game
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dailyraily.data.model.Game
-import com.example.dailyraily.data.service.TodoListManager
 
 class GameViewModel : ViewModel() {
-    var data: List<Game> = listOf()
 
-
-    fun updateData() {
-        data = TodoListManager.getAllGame()
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is game Fragment"
     }
+    val text: LiveData<String> = _text
 }

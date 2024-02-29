@@ -33,8 +33,7 @@ class ListFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[ListViewModel::class.java]
 
-        recyclerView.adapter = ListAdapter(viewModel.data, requireContext())
+        recyclerView.adapter = ListAdapter(viewModel.data)
         recyclerView.visibility = View.VISIBLE
     }
-
 }

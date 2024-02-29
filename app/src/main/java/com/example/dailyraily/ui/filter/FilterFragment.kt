@@ -35,12 +35,6 @@ class FilterFragment : Fragment() {
         return root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val filterData = arguments?.getString("filterData")
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
